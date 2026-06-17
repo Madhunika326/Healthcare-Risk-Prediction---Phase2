@@ -1,182 +1,234 @@
 {% extends "base.html" %}
 
+{% block title %}Home - Healthcare Risk Prediction System{% endblock %}
+
 {% block content %}
+<!-- Hero Section -->
 <div class="row mb-5">
-    <div class="col-lg-8">
-        <div class="hero-section mb-5">
-            <div class="card border-0 shadow-lg bg-gradient text-white">
-                <div class="card-body p-6">
-                    <h1 class="card-title mb-4 display-4 fw-bold">
-                        <i class="fas fa-heart text-danger"></i> Healthcare Risk Prediction
-                    </h1>
-                    <p class="card-text lead mb-5" style="line-height: 1.8; font-size: 1.2rem;">
-                        AI-powered health risk assessment using advanced machine learning. Get personalized insights about your health status in seconds.
-                    </p>
-                    <div class="d-flex gap-3 flex-wrap">
-                        {% if not current_user.is_authenticated %}
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5 py-3 shadow-sm">
-                            <i class="fas fa-play-circle me-2"></i> Start Risk Assessment
-                        </a>
-                        {% else %}
-                        <a href="{{ url_for('assessment.form') }}" class="btn btn-light btn-lg px-5 py-3 shadow-sm">
-                            <i class="fas fa-stethoscope me-2"></i> Start Risk Assessment
-                        </a>
-                        {% endif %}
-                        <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-light btn-lg px-5 py-3">
-                            <i class="fas fa-graduation-cap me-2"></i> Learn How It Works
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Key Features -->
-        <div class="row mb-5">
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center feature-card">
-                    <div class="card-body p-4">
-                        <i class="fas fa-brain fa-4x text-primary mb-3"></i>
-                        <h5 class="card-title fw-bold mb-3">AI-Powered Predictions</h5>
-                        <p class="card-text text-muted">Hybrid autoencoder + ANN model trained on thousands of verified healthcare records for accurate risk assessment.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center feature-card">
-                    <div class="card-body p-4">
-                        <i class="fas fa-lock fa-4x text-success mb-3"></i>
-                        <h5 class="card-title fw-bold mb-3">Secure & Private</h5>
-                        <p class="card-text text-muted">Your health data is encrypted, never shared with third parties, and stored securely on our servers.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center feature-card">
-                    <div class="card-body p-4">
-                        <i class="fas fa-chart-line fa-4x text-info mb-3"></i>
-                        <h5 class="card-title fw-bold mb-3">Track Progress</h5>
-                        <p class="card-text text-muted">Monitor your health risk over time with comprehensive analytics and detailed assessment history.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Model Information Sidebar -->
-    <div class="col-lg-4">
-        <!-- Model Architecture Card -->
-        <div class="card shadow-lg mb-4 border-left-primary">
-            <div class="card-header bg-gradient text-white">
-                <h5 class="mb-0"><i class="fas fa-microchip"></i> Model Architecture</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <h6 class="text-primary">Hybrid Approach</h6>
-                    <p class="small text-muted mb-2"><strong>Phase 1:</strong> Autoencoder for unsupervised feature learning</p>
-                    <p class="small text-muted"><strong>Phase 2:</strong> ANN regressor for risk score prediction</p>
-                </div>
-                <div class="alert alert-light border-left-primary p-3">
-                    <small><i class="fas fa-check-circle text-success"></i> Trained on 3,836 healthcare records</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- Risk Categories Card -->
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-dark text-white">
-                <h5 class="mb-0"><i class="fas fa-traffic-light"></i> Risk Categories</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <div class="d-flex align-items-center mb-2">
-                        <span class="badge bg-success me-2" style="width: 40px; padding: 10px;">●</span>
-                        <div>
-                            <small class="text-muted"><strong>Low Risk</strong></small>
-                            <br><small class="text-muted">Score: &lt; 35</small>
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%); color: white;">
+            <div class="card-body py-5 px-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <h1 class="display-5 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; font-size: 3rem;">
+                            Healthcare Risk Prediction System
+                        </h1>
+                        <p class="lead mb-4" style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                            AI-powered risk assessment using Autoencoder feature extraction and Artificial Neural Networks for accurate, personalized health insights.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            {% if not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4 py-2 fw-bold">
+                                <i class="fas fa-play-circle me-2"></i> Start Assessment
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('assessment.form') }}" class="btn btn-light btn-lg px-4 py-2 fw-bold">
+                                <i class="fas fa-stethoscope me-2"></i> New Assessment
+                            </a>
+                            {% endif %}
+                            <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-light btn-lg px-4 py-2 fw-bold">
+                                <i class="fas fa-graduation-cap me-2"></i> Learn More
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center mb-2">
-                        <span class="badge bg-warning me-2" style="width: 40px; padding: 10px;">●</span>
-                        <div>
-                            <small class="text-muted"><strong>Medium Risk</strong></small>
-                            <br><small class="text-muted">Score: 35-65</small>
+                    <div class="col-lg-5 text-center d-none d-lg-block">
+                        <div style="font-size: 6rem; color: rgba(255,255,255,0.3);">
+                            <i class="fas fa-heartbeat"></i>
                         </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <div class="d-flex align-items-center">
-                        <span class="badge bg-danger me-2" style="width: 40px; padding: 10px;">●</span>
-                        <div>
-                            <small class="text-muted"><strong>High Risk</strong></small>
-                            <br><small class="text-muted">Score: &gt; 65</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Assessment Features Card -->
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-list-check"></i> 12 Key Features</h5>
-            </div>
-            <div class="card-body">
-                <small class="text-muted">
-                    <strong>Numerical:</strong> Age, Health Awareness, Symptom Severity, Distance to Healthcare, Fear of Cost, Fear of Hospital, Delay in Care<br><br>
-                    <strong>Categorical:</strong> Gender, Residence, Education, Income, Insurance
-                </small>
-            </div>
-        </div>
-
-        <!-- Health Tips Card -->
-        <div class="card shadow-lg">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-heart-pulse"></i> Health Tips</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Regular Check-ups</h6>
-                    <p class="small text-muted">Schedule regular health assessments to monitor your status.</p>
-                </div>
-                <div class="mb-3">
-                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Healthy Lifestyle</h6>
-                    <p class="small text-muted">Maintain a balanced diet and regular exercise routine.</p>
-                </div>
-                <div>
-                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Preventive Care</h6>
-                    <p class="small text-muted">Prevention is better than cure. Act proactively.</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- About Section -->
+<!-- Key Features -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center fw-bold mb-5" style="color: #1E293B; font-size: 2rem;">Platform Features</h2>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <a href="{{ url_for('main.about') }}" class="text-decoration-none">
+            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #2563EB; cursor: pointer; transition: all 0.3s ease;">
+                <div class="card-body p-4">
+                    <i class="fas fa-brain fa-4x mb-3" style="color: #2563EB;"></i>
+                    <h5 class="card-title fw-bold mb-3">AI-Powered Prediction</h5>
+                    <p class="card-text text-muted">Hybrid Autoencoder + ANN model trained on verified healthcare data for accurate risk assessment.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <a href="{{ url_for('main.privacy') }}" class="text-decoration-none">
+            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #10B981; cursor: pointer; transition: all 0.3s ease;">
+                <div class="card-body p-4">
+                    <i class="fas fa-shield-alt fa-4x mb-3" style="color: #10B981;"></i>
+                    <h5 class="card-title fw-bold mb-3">Secure & Private</h5>
+                    <p class="card-text text-muted">Enterprise-grade encryption ensures your health data is protected and never shared with third parties.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <a href="{{ url_for('dashboard.index') }}" class="text-decoration-none">
+            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #14B8A6; cursor: pointer; transition: all 0.3s ease;">
+                <div class="card-body p-4">
+                    <i class="fas fa-chart-line fa-4x mb-3" style="color: #14B8A6;"></i>
+                    <h5 class="card-title fw-bold mb-3">Track & Monitor</h5>
+                    <p class="card-text text-muted">View your risk trends over time with interactive charts and comprehensive health analytics.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
 <div class="row mb-5">
     <div class="col-lg-12">
-        <div class="card border-0 bg-light shadow-sm">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 feature-card" style="border-left: 4px solid #F59E0B;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="fas fa-file-pdf me-2" style="color: #F59E0B;"></i> PDF Reports
+                        </h5>
+                        <p class="card-text text-muted">Generate professional health reports in PDF format for your records or medical consultation.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 feature-card" style="border-left: 4px solid #0EA5E9;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="fas fa-lightbulb me-2" style="color: #0EA5E9;"></i> Personalized Insights
+                        </h5>
+                        <p class="card-text text-muted">Receive tailored health recommendations based on your individual risk profile and assessment results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Information Panel -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center fw-bold mb-5" style="color: #1E293B; font-size: 2rem;">Machine Learning Model Architecture</h2>
+    </div>
+    <div class="col-lg-3 mb-4">
+        <div class="card text-center h-100 feature-card">
+            <div class="card-body p-4">
+                <div style="font-size: 3rem; color: #2563EB; margin-bottom: 1rem;">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Autoencoder</h5>
+                <p class="card-text text-muted small">Unsupervised feature extraction with dimensionality reduction for latent health representations.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 mb-4">
+        <div class="card text-center h-100 feature-card">
+            <div class="card-body p-4">
+                <div style="font-size: 3rem; color: #10B981; margin-bottom: 1rem;">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h5 class="card-title fw-bold mb-3">ANN Regressor</h5>
+                <p class="card-text text-muted small">Supervised neural network predicting continuous health risk scores based on hybrid features.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 mb-4">
+        <div class="card text-center h-100 feature-card">
+            <div class="card-body p-4">
+                <div style="font-size: 3rem; color: #14B8A6; margin-bottom: 1rem;">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Personalized</h5>
+                <p class="card-text text-muted small">Individual assessment combining demographic, behavioral, and health indicators for accurate predictions.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 mb-4">
+        <div class="card text-center h-100 feature-card">
+            <div class="card-body p-4">
+                <div style="font-size: 3rem; color: #F59E0B; margin-bottom: 1rem;">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h5 class="card-title fw-bold mb-3">Early Detection</h5>
+                <p class="card-text text-muted small">Identify high-risk individuals early for preventive intervention and healthcare management.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Tips Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center fw-bold mb-5" style="color: #1E293B; font-size: 2rem;">Health Tips & Prevention</h2>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold mb-3" style="color: #10B981;">
+                    <i class="fas fa-calendar-check me-2"></i> Regular Checkups
+                </h5>
+                <p class="card-text text-muted">Schedule regular health assessments to monitor your health status and catch early warning signs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold mb-3" style="color: #EF4444;">
+                    <i class="fas fa-heart me-2"></i> Healthy Lifestyle
+                </h5>
+                <p class="card-text text-muted">Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold mb-3" style="color: #2563EB;">
+                    <i class="fas fa-first-aid me-2"></i> Preventive Care
+                </h5>
+                <p class="card-text text-muted">Prevention is better than cure. Take proactive measures and follow medical recommendations seriously.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Platform Section -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-lg" style="background: #F8FAFC;">
             <div class="card-body p-5">
-                <h2 class="mb-4 fw-bold text-primary"><i class="fas fa-lightbulb me-2"></i> About This Platform</h2>
+                <h3 class="fw-bold mb-4" style="color: #1E293B; font-size: 1.75rem;">About This Platform</h3>
                 <div class="row">
-                    <div class="col-lg-6 mb-3">
-                        <p class="lead text-muted mb-3">
-                            Our Healthcare Risk Prediction system uses advanced machine learning to assess your health risk based on 12 key health indicators.
-                        </p>
-                        <p class="text-muted">
-                            The hybrid model combines unsupervised learning (autoencoder) for feature extraction with supervised learning (ANN) for risk prediction.
+                    <div class="col-lg-6 mb-4">
+                        <p style="color: #64748B; line-height: 1.8; margin-bottom: 1rem;">
+                            Our Healthcare Risk Prediction system represents cutting-edge machine learning applied to health risk assessment. 
+                            Trained on 3,836 verified healthcare records, our hybrid Autoencoder + ANN architecture provides personalized 
+                            risk predictions based on 12 key health indicators.
                         </p>
                     </div>
-                    <div class="col-lg-6 mb-3">
-                        <div class="alert alert-primary alert-light border-left-primary">
-                            <h6 class="mb-2"><i class="fas fa-certificate text-success"></i> Research-Backed</h6>
-                            <small class="text-muted">
-                                Built on peer-reviewed research using a comprehensive dataset of 3,836 healthcare records. 
-                                This system implements state-of-the-art ML techniques for optimal accuracy.
-                            </small>
-                        </div>
+                    <div class="col-lg-6">
+                        <p style="color: #64748B; line-height: 1.8; margin-bottom: 1rem;">
+                            This platform demonstrates advanced techniques in unsupervised and supervised learning, combining feature extraction 
+                            with predictive modeling for practical healthcare application. Ideal for MCA final year projects, healthcare analytics 
+                            demonstrations, and research presentations.
+                        </p>
                     </div>
+                </div>
+                <div class="alert border-0 p-4 mb-4" style="background: #E0F2FE; border-left: 4px solid #2563EB;">
+                    <p style="color: #0C4A6E; margin: 0;">
+                        <i class="fas fa-info-circle me-2 fw-bold"></i> 
+                        <strong>Research-Backed:</strong> This platform implements peer-reviewed methodologies and demonstrates advanced ML concepts suitable for academic review and demonstration.
+                    </p>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('main.about') }}" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-book me-2"></i> Learn More About This Project
+                    </a>
                 </div>
             </div>
         </div>
@@ -187,54 +239,22 @@
 
 {% block extra_css %}
 <style>
-    .bg-gradient {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    
-    .stat-item {
-        padding: 10px 0;
-    }
-    
-    .hero-section {
-        animation: slideInUp 0.8s ease-out;
-    }
-    
     .feature-card {
-        border: none;
-        border-radius: 12px;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .feature-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
     }
-    
-    .feature-card i {
-        transition: all 0.3s ease;
+
+    a.text-decoration-none {
+        color: inherit;
     }
-    
-    .feature-card:hover i {
-        transform: scale(1.1) rotate(-5deg);
-    }
-    
-    .border-left-primary {
-        border-left: 5px solid #667eea !important;
-    }
-    
-    .p-6 {
-        padding: 3rem !important;
-    }
-    
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+    .card a {
+        text-decoration: none;
+        color: inherit;
     }
 </style>
 {% endblock %}
