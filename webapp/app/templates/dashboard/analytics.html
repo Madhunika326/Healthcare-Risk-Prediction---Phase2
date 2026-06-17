@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Advanced Analytics</h2>
+        <p class="text-muted">Detailed breakdown of your health assessment patterns and trends</p>
+    </div>
+</div>
+
+<!-- Time-based Analytics -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i> Risk Score Trend Over Time</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="trendChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Trend Summary</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    <strong>Latest Score:</strong> <span class="badge bg-danger">--</span>
+                </p>
+                <p class="text-muted">
+                    <strong>Highest Score:</strong> <span class="badge bg-warning">--</span>
+                </p>
+                <p class="text-muted">
+                    <strong>Lowest Score:</strong> <span class="badge bg-success">--</span>
+                </p>
+                <p class="text-muted">
+                    <strong>Average Score:</strong> <span class="badge bg-info">--</span>
+                </p>
+                <hr>
+                <small class="text-muted">
+                    Track your progress and monitor how your health risk score changes over time. 
+                    Use this information to guide your health decisions.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Analysis -->
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-bars me-2"></i> Feature Impact Analysis</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="featureChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-lg">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Top Risk Factors</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Health Awareness Score</small>
+                        <small class="text-danger"><strong>High Impact</strong></small>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-danger" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Delay in Seeking Care</small>
+                        <small class="text-warning"><strong>High Impact</strong></small>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-warning" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Distance to Healthcare</small>
+                        <small class="text-info"><strong>Medium Impact</strong></small>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-info" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Demographic Insights -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i> Your Demographics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Age Group</h6>
+                        <h4 class="text-primary">-- years</h4>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Residence</h6>
+                        <h4 class="text-info">--</h4>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Education</h6>
+                        <h4 class="text-success">--</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-heart-pulse me-2"></i> Health Profile</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted"><strong>Insurance:</strong> --</p>
+                <p class="text-muted"><strong>Income Level:</strong> --</p>
+                <p class="text-muted"><strong>Healthcare Access:</strong> -- km away</p>
+                <hr>
+                <small class="text-muted">Last assessment: --</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Section -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg bg-light border-0">
+            <div class="card-body text-center p-5">
+                <h5 class="mb-3">Export Your Analytics</h5>
+                <p class="text-muted mb-4">Download your complete health analytics report for your records or to share with healthcare providers.</p>
+                <button class="btn btn-primary me-2" onclick="alert('PDF export feature coming soon')">
+                    <i class="fas fa-file-pdf me-2"></i> Export as PDF
+                </button>
+                <button class="btn btn-secondary" onclick="alert('CSV export feature coming soon')">
+                    <i class="fas fa-file-csv me-2"></i> Export as CSV
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart');
+    if (trendCtx) {
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                datasets: [{
+                    label: 'Risk Score',
+                    data: [45, 42, 48, 43, 40, 38],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#667eea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // Feature Impact Chart
+    const featureCtx = document.getElementById('featureChart');
+    if (featureCtx) {
+        new Chart(featureCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['Health Awareness', 'Delay in Care', 'Distance', 'Symptom Severity', 'Fear of Cost'],
+                datasets: [{
+                    label: 'Impact Score',
+                    data: [95, 85, 65, 60, 55],
+                    backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#28a745', '#6c757d'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -11,16 +11,23 @@ import pandas as pd
 from pathlib import Path
 from typing import Dict, Tuple, Any
 
-# Add parent directory to path to import predict_risk
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add parent directory to path to import predict_risk module
+# ml_service.py location: webapp/app/services/ml_service.py
+# predict_risk.py location: Healthcare_Risk_Prediction/predict_risk.py
+# Navigate up 4 levels: services -> app -> webapp -> Healthcare_Risk_Prediction
+parent_dir = str(Path(__file__).parent.parent.parent.parent.absolute())
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 try:
     from predict_risk import (
-        RiskConfig, ModelLoader, InputValidator,
-        FeatureProcessor, RiskPredictor
+        InputValidator,
+        RiskPredictor
     )
+    print(f"✓ Successfully imported predict_risk from: {parent_dir}")
 except ImportError as e:
-    print(f"Warning: Could not import prediction pipeline: {e}")
+    print(f"✗ Error: Could not import prediction pipeline: {e}")
+    print(f"  Expected: {parent_dir}/predict_risk.py")
 
 
 class MLPredictionService:
@@ -31,22 +38,20 @@ class MLPredictionService:
         Initialize the prediction service
         
         Args:
-            models_path: Path to models directory
+            models_path: Not used - RiskPredictor loads models automatically
         """
-        self.models_path = models_path or Path(__file__).parent.parent.parent / 'models'
         self.predictor = None
-        self.config = None
         self._initialize_models()
     
     def _initialize_models(self):
         """Initialize and load ML models"""
         try:
-            # Initialize predictor
-            self.config = RiskConfig(str(self.models_path))
-            self.predictor = RiskPredictor(self.config)
-            print("ML models loaded successfully")
+            # RiskPredictor initializes itself and loads all models internally
+            # No RiskConfig instantiation needed - it's just a static config class
+            self.predictor = RiskPredictor()
+            print("✓ ML models loaded successfully")
         except Exception as e:
-            print(f"Error initializing ML models: {e}")
+            print(f"✗ Error initializing ML models: {e}")
             raise
     
     def validate_input(self, input_data: Dict[str, Any]) -> Tuple[bool, str]:

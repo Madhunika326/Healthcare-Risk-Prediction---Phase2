@@ -8,7 +8,14 @@ Usage:
 """
 
 import os
+import sys
+from pathlib import Path
 from dotenv import load_dotenv
+
+# Add parent directory to path for importing predict_risk module
+parent_dir = str(Path(__file__).parent.parent.absolute())
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 # Load environment variables
 load_dotenv()

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}Health Insights - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h2 class="mb-4"><i class="fas fa-lightbulb"></i> AI Health Insights</h2>
+        <p class="text-muted">Personalized health recommendations based on your assessment data</p>
+    </div>
+</div>
+
+<!-- Risk Status Card -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center">
+                    <h3 class="mb-4">Your Current Health Status</h3>
+                    <div class="risk-gauge mb-4">
+                        <div class="gauge-circle" style="background: conic-gradient(#28a745 0deg 108deg, #ffc107 108deg 252deg, #dc3545 252deg 360deg)">
+                            <div class="gauge-inner">
+                                <div class="gauge-label">
+                                    <h1 class="mb-0">42</h1>
+                                    <small>Risk Score</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="mb-2"><span class="badge bg-warning text-dark px-4 py-2" style="font-size: 1.1rem;">MEDIUM RISK</span></h4>
+                    <p class="text-muted mb-0">Your health risk is moderate. Consider implementing preventive measures.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-bullseye me-2"></i> Target Score</h5>
+            </div>
+            <div class="card-body text-center">
+                <h2 class="text-success mb-3">< 35</h2>
+                <p class="text-muted mb-3">Your target is to achieve a LOW RISK score</p>
+                <div class="progress mb-3" style="height: 25px;">
+                    <div class="progress-bar bg-success" style="width: 60%">60% Progress</div>
+                </div>
+                <small class="text-muted">By following the recommendations, you can lower your risk score</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Personalized Recommendations -->
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-star me-2"></i> Personalized Health Recommendations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="recommendation-box">
+                            <div class="rec-icon bg-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h6 class="mt-3 mb-2">Improve Health Awareness</h6>
+                            <p class="text-muted small mb-0">
+                                Consider reading health resources and educational materials about preventive care and wellness.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="recommendation-box">
+                            <div class="rec-icon bg-info">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h6 class="mt-3 mb-2">Reduce Healthcare Delay</h6>
+                            <p class="text-muted small mb-0">
+                                Don't delay seeking medical help when symptoms appear. Early intervention leads to better outcomes.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="recommendation-box">
+                            <div class="rec-icon bg-warning">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h6 class="mt-3 mb-2">Access Healthcare Services</h6>
+                            <p class="text-muted small mb-0">
+                                Look for nearby healthcare facilities and establish regular check-ups with your primary physician.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="recommendation-box">
+                            <div class="rec-icon bg-danger">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h6 class="mt-3 mb-2">Address Health Concerns</h6>
+                            <p class="text-muted small mb-0">
+                                Don't ignore symptoms or health concerns. Seek professional medical evaluation promptly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lifestyle Recommendations -->
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-heartbeat me-2"></i> Lifestyle Changes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-primary me-2"></i>
+                        <strong>Exercise Regularly:</strong> Aim for 30 minutes of moderate activity daily
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-primary me-2"></i>
+                        <strong>Balanced Diet:</strong> Include fruits, vegetables, and whole grains
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-primary me-2"></i>
+                        <strong>Adequate Sleep:</strong> Maintain 7-8 hours of quality sleep daily
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-primary me-2"></i>
+                        <strong>Stress Management:</strong> Practice meditation, yoga, or relaxation techniques
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-hospital me-2"></i> Healthcare Tips</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-dark me-2"></i>
+                        <strong>Regular Check-ups:</strong> Schedule annual health screenings
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-dark me-2"></i>
+                        <strong>Vaccinations:</strong> Keep immunizations up to date
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-dark me-2"></i>
+                        <strong>Medication Adherence:</strong> Take prescribed medications as directed
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-arrow-right text-dark me-2"></i>
+                        <strong>Professional Advice:</strong> Always consult healthcare providers for medical decisions
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Next Steps -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg bg-light border-0">
+            <div class="card-body p-5 text-center">
+                <h4 class="mb-3">Next Steps</h4>
+                <p class="text-muted mb-4">
+                    Follow the personalized recommendations above and retake the assessment in 1-2 months to track your progress.
+                </p>
+                <a href="{{ url_for('assessment.form') }}" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-redo me-2"></i> Retake Assessment
+                </a>
+                <a href="{{ url_for('assessment.history') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-history me-2"></i> View History
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .risk-gauge {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .gauge-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .gauge-inner {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .gauge-label {
+        text-align: center;
+    }
+    
+    .gauge-label h1 {
+        color: #667eea;
+        font-weight: bold;
+    }
+    
+    .gauge-label small {
+        color: #999;
+    }
+    
+    .recommendation-box {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .recommendation-box:hover {
+        transform: translateY(-5px);
+        background: white;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .rec-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}

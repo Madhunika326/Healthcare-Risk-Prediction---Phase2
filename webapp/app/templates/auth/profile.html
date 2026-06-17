@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-circle"></i> Your Profile</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h6 class="text-muted">Username</h6>
+                    <h5>{{ user.username }}</h5>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Email</h6>
+                    <h5>{{ user.email }}</h5>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Full Name</h6>
+                    <h5>{{ user.get_full_name() or 'Not set' }}</h5>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Member Since</h6>
+                        <h5>{{ user.created_at.strftime('%B %d, %Y') }}</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Total Assessments</h6>
+                        <h5>{{ user.get_prediction_count() }}</h5>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Average Risk Score</h6>
+                        <h5>{{ user.get_average_risk_score() or 'N/A' }}</h5>
+                    </div>
+                </div>
+
+                <hr>
+
+                <a href="{{ url_for('auth.edit_profile') }}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

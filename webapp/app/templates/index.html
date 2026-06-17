@@ -5,25 +5,27 @@
     <div class="col-lg-8">
         <div class="hero-section mb-5">
             <div class="card border-0 shadow-lg bg-gradient text-white">
-                <div class="card-body p-5">
-                    <h1 class="card-title mb-3">
+                <div class="card-body p-6">
+                    <h1 class="card-title mb-4 display-4 fw-bold">
                         <i class="fas fa-heart text-danger"></i> Healthcare Risk Prediction
                     </h1>
-                    <p class="card-text lead mb-4">
-                        AI-powered health risk assessment using advanced machine learning. Get personalized insights about your health status.
+                    <p class="card-text lead mb-5" style="line-height: 1.8; font-size: 1.2rem;">
+                        AI-powered health risk assessment using advanced machine learning. Get personalized insights about your health status in seconds.
                     </p>
-                    {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg me-2">
-                        <i class="fas fa-user-plus"></i> Get Started
-                    </a>
-                    {% else %}
-                    <a href="{{ url_for('assessment.form') }}" class="btn btn-light btn-lg me-2">
-                        <i class="fas fa-stethoscope"></i> Start Assessment
-                    </a>
-                    {% endif %}
-                    <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-light btn-lg">
-                        Learn More
-                    </a>
+                    <div class="d-flex gap-3 flex-wrap">
+                        {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5 py-3 shadow-sm">
+                            <i class="fas fa-play-circle me-2"></i> Start Risk Assessment
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('assessment.form') }}" class="btn btn-light btn-lg px-5 py-3 shadow-sm">
+                            <i class="fas fa-stethoscope me-2"></i> Start Risk Assessment
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="fas fa-graduation-cap me-2"></i> Learn How It Works
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -31,91 +33,120 @@
         <!-- Key Features -->
         <div class="row mb-5">
             <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">AI-Powered</h5>
-                        <p class="card-text">Machine learning model trained on 3,836 healthcare records</p>
+                <div class="card h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <i class="fas fa-brain fa-4x text-primary mb-3"></i>
+                        <h5 class="card-title fw-bold mb-3">AI-Powered Predictions</h5>
+                        <p class="card-text text-muted">Hybrid autoencoder + ANN model trained on thousands of verified healthcare records for accurate risk assessment.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="fas fa-lock fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">Secure & Private</h5>
-                        <p class="card-text">Your health data is encrypted and never shared</p>
+                <div class="card h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <i class="fas fa-lock fa-4x text-success mb-3"></i>
+                        <h5 class="card-title fw-bold mb-3">Secure & Private</h5>
+                        <p class="card-text text-muted">Your health data is encrypted, never shared with third parties, and stored securely on our servers.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
-                        <h5 class="card-title">Track Progress</h5>
-                        <p class="card-text">Monitor your health risk over time with analytics</p>
+                <div class="card h-100 text-center feature-card">
+                    <div class="card-body p-4">
+                        <i class="fas fa-chart-line fa-4x text-info mb-3"></i>
+                        <h5 class="card-title fw-bold mb-3">Track Progress</h5>
+                        <p class="card-text text-muted">Monitor your health risk over time with comprehensive analytics and detailed assessment history.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Statistics Sidebar -->
+    <!-- Model Information Sidebar -->
     <div class="col-lg-4">
-        <div class="card shadow-sm mb-3">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Platform Statistics</h5>
+        <!-- Model Architecture Card -->
+        <div class="card shadow-lg mb-4 border-left-primary">
+            <div class="card-header bg-gradient text-white">
+                <h5 class="mb-0"><i class="fas fa-microchip"></i> Model Architecture</h5>
             </div>
             <div class="card-body">
-                <div class="stat-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Total Assessments</span>
-                        <span class="h4 mb-0">{{ stats.total_assessments }}</span>
-                    </div>
+                <div class="mb-3">
+                    <h6 class="text-primary">Hybrid Approach</h6>
+                    <p class="small text-muted mb-2"><strong>Phase 1:</strong> Autoencoder for unsupervised feature learning</p>
+                    <p class="small text-muted"><strong>Phase 2:</strong> ANN regressor for risk score prediction</p>
                 </div>
-                <hr>
-                <div class="stat-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Low Risk</span>
-                        <span class="badge bg-success">{{ stats.low_risk_percentage }}%</span>
-                    </div>
-                </div>
-                <div class="stat-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Medium Risk</span>
-                        <span class="badge bg-warning">{{ stats.medium_risk_percentage }}%</span>
-                    </div>
-                </div>
-                <div class="stat-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">High Risk</span>
-                        <span class="badge bg-danger">{{ stats.high_risk_percentage }}%</span>
-                    </div>
-                </div>
-                <hr>
-                <div class="stat-item">
-                    <small class="text-muted">Age Range: {{ stats.age_range }}</small>
+                <div class="alert alert-light border-left-primary p-3">
+                    <small><i class="fas fa-check-circle text-success"></i> Trained on 3,836 healthcare records</small>
                 </div>
             </div>
         </div>
 
-        <!-- Latest News -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Health Tips</h5>
+        <!-- Risk Categories Card -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-traffic-light"></i> Risk Categories</h5>
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <h6 class="text-primary">Regular Check-ups</h6>
-                    <p class="small text-muted">Schedule regular health assessments to monitor your health status.</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-success me-2" style="width: 40px; padding: 10px;">●</span>
+                        <div>
+                            <small class="text-muted"><strong>Low Risk</strong></small>
+                            <br><small class="text-muted">Score: &lt; 35</small>
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <h6 class="text-primary">Healthy Lifestyle</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-warning me-2" style="width: 40px; padding: 10px;">●</span>
+                        <div>
+                            <small class="text-muted"><strong>Medium Risk</strong></small>
+                            <br><small class="text-muted">Score: 35-65</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-danger me-2" style="width: 40px; padding: 10px;">●</span>
+                        <div>
+                            <small class="text-muted"><strong>High Risk</strong></small>
+                            <br><small class="text-muted">Score: &gt; 65</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Features Card -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-list-check"></i> 12 Key Features</h5>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <strong>Numerical:</strong> Age, Health Awareness, Symptom Severity, Distance to Healthcare, Fear of Cost, Fear of Hospital, Delay in Care<br><br>
+                    <strong>Categorical:</strong> Gender, Residence, Education, Income, Insurance
+                </small>
+            </div>
+        </div>
+
+        <!-- Health Tips Card -->
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-heart-pulse"></i> Health Tips</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Regular Check-ups</h6>
+                    <p class="small text-muted">Schedule regular health assessments to monitor your status.</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Healthy Lifestyle</h6>
                     <p class="small text-muted">Maintain a balanced diet and regular exercise routine.</p>
                 </div>
                 <div>
-                    <h6 class="text-primary">Preventive Care</h6>
-                    <p class="small text-muted">Prevention is better than cure. Take preventive measures seriously.</p>
+                    <h6 class="text-success"><i class="fas fa-check-circle"></i> Preventive Care</h6>
+                    <p class="small text-muted">Prevention is better than cure. Act proactively.</p>
                 </div>
             </div>
         </div>
@@ -125,17 +156,28 @@
 <!-- About Section -->
 <div class="row mb-5">
     <div class="col-lg-12">
-        <div class="card border-0 bg-light">
+        <div class="card border-0 bg-light shadow-sm">
             <div class="card-body p-5">
-                <h3 class="mb-3">About This Platform</h3>
-                <p class="mb-3">
-                    Our Healthcare Risk Prediction system uses advanced machine learning to assess your health risk based on 12 key health indicators. 
-                    The model has been trained on thousands of healthcare records to provide accurate, personalized health risk assessments.
-                </p>
-                <p>
-                    <strong>Research-Backed:</strong> This platform is built on peer-reviewed research and implements a hybrid autoencoder + ANN architecture 
-                    for optimal accuracy and interpretability.
-                </p>
+                <h2 class="mb-4 fw-bold text-primary"><i class="fas fa-lightbulb me-2"></i> About This Platform</h2>
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <p class="lead text-muted mb-3">
+                            Our Healthcare Risk Prediction system uses advanced machine learning to assess your health risk based on 12 key health indicators.
+                        </p>
+                        <p class="text-muted">
+                            The hybrid model combines unsupervised learning (autoencoder) for feature extraction with supervised learning (ANN) for risk prediction.
+                        </p>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="alert alert-primary alert-light border-left-primary">
+                            <h6 class="mb-2"><i class="fas fa-certificate text-success"></i> Research-Backed</h6>
+                            <small class="text-muted">
+                                Built on peer-reviewed research using a comprehensive dataset of 3,836 healthcare records. 
+                                This system implements state-of-the-art ML techniques for optimal accuracy.
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -155,6 +197,33 @@
     
     .hero-section {
         animation: slideInUp 0.8s ease-out;
+    }
+    
+    .feature-card {
+        border: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+    }
+    
+    .feature-card i {
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover i {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    
+    .border-left-primary {
+        border-left: 5px solid #667eea !important;
+    }
+    
+    .p-6 {
+        padding: 3rem !important;
     }
     
     @keyframes slideInUp {

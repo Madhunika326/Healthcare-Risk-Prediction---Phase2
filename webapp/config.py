@@ -34,8 +34,9 @@ class Config:
     UPLOAD_FOLDER = os.path.join(basedir, 'app', 'static', 'uploads')
     ALLOWED_EXTENSIONS = {'pdf', 'csv', 'xlsx'}
     
-    # ML Models Path
-    MODELS_PATH = os.path.join(basedir, '..', 'models')
+    # ML Models Path - point to parent directory models folder
+    # basedir is webapp, so .. goes to Healthcare_Risk_Prediction/models
+    MODELS_PATH = os.path.abspath(os.path.join(basedir, '..', 'models'))
     
     # Logging
     LOG_LEVEL = 'INFO'
