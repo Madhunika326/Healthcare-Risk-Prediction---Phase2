@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h2 class="mb-4"><i class="fas fa-chart-pie"></i> Your Dashboard</h2>
+    </div>
+</div>
+
+<!-- Statistics Row -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-heart fa-2x text-danger mb-3"></i>
+                <h6 class="text-muted">Total Assessments</h6>
+                <h3 class="text-primary">{{ total_predictions }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-chart-line fa-2x text-info mb-3"></i>
+                <h6 class="text-muted">Average Risk Score</h6>
+                <h3 class="text-info">{{ avg_risk_score or 'N/A' }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-circle text-success fa-2x mb-3"></i>
+                <h6 class="text-muted">Low Risk</h6>
+                <h3 class="text-success">{{ risk_distribution.Low }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-exclamation-circle fa-2x text-warning mb-3"></i>
+                <h6 class="text-muted">High Risk</h6>
+                <h3 class="text-warning">{{ risk_distribution.High }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Risk Distribution Chart -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Risk Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="riskDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Assessments</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_predictions %}
+                    {% for pred in recent_predictions %}
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Age: {{ pred.age }}</h6>
+                                <small class="text-muted">{{ pred.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </div>
+                            <span class="badge bg-{{ 'success' if pred.risk_category == 'Low' else 'warning' if pred.risk_category == 'Medium' else 'danger' }}">
+                                {{ pred.health_risk_score }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No assessments yet. <a href="{{ url_for('assessment.form') }}">Start one now</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <a href="{{ url_for('assessment.form') }}" class="btn btn-primary btn-block w-100">
+            <i class="fas fa-stethoscope"></i> New Assessment
+        </a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{{ url_for('dashboard.analytics') }}" class="btn btn-info btn-block w-100">
+            <i class="fas fa-chart-bar"></i> Analytics
+        </a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{{ url_for('assessment.history') }}" class="btn btn-secondary btn-block w-100">
+            <i class="fas fa-history"></i> History
+        </a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{{ url_for('dashboard.insights') }}" class="btn btn-warning btn-block w-100">
+            <i class="fas fa-lightbulb"></i> Insights
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Risk Distribution Chart
+    const ctx = document.getElementById('riskDistributionChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                datasets: [{
+                    data: [{{ risk_distribution.Low }}, {{ risk_distribution.Medium }}, {{ risk_distribution.High }}],
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-lg-8">
+        <div class="hero-section mb-5">
+            <div class="card border-0 shadow-lg bg-gradient text-white">
+                <div class="card-body p-5">
+                    <h1 class="card-title mb-3">
+                        <i class="fas fa-heart text-danger"></i> Healthcare Risk Prediction
+                    </h1>
+                    <p class="card-text lead mb-4">
+                        AI-powered health risk assessment using advanced machine learning. Get personalized insights about your health status.
+                    </p>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg me-2">
+                        <i class="fas fa-user-plus"></i> Get Started
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('assessment.form') }}" class="btn btn-light btn-lg me-2">
+                        <i class="fas fa-stethoscope"></i> Start Assessment
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-light btn-lg">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">AI-Powered</h5>
+                        <p class="card-text">Machine learning model trained on 3,836 healthcare records</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-lock fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Secure & Private</h5>
+                        <p class="card-text">Your health data is encrypted and never shared</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Track Progress</h5>
+                        <p class="card-text">Monitor your health risk over time with analytics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Sidebar -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-3">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Platform Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="stat-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Total Assessments</span>
+                        <span class="h4 mb-0">{{ stats.total_assessments }}</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="stat-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Low Risk</span>
+                        <span class="badge bg-success">{{ stats.low_risk_percentage }}%</span>
+                    </div>
+                </div>
+                <div class="stat-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Medium Risk</span>
+                        <span class="badge bg-warning">{{ stats.medium_risk_percentage }}%</span>
+                    </div>
+                </div>
+                <div class="stat-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">High Risk</span>
+                        <span class="badge bg-danger">{{ stats.high_risk_percentage }}%</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="stat-item">
+                    <small class="text-muted">Age Range: {{ stats.age_range }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest News -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Health Tips</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-primary">Regular Check-ups</h6>
+                    <p class="small text-muted">Schedule regular health assessments to monitor your health status.</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-primary">Healthy Lifestyle</h6>
+                    <p class="small text-muted">Maintain a balanced diet and regular exercise routine.</p>
+                </div>
+                <div>
+                    <h6 class="text-primary">Preventive Care</h6>
+                    <p class="small text-muted">Prevention is better than cure. Take preventive measures seriously.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <div class="card border-0 bg-light">
+            <div class="card-body p-5">
+                <h3 class="mb-3">About This Platform</h3>
+                <p class="mb-3">
+                    Our Healthcare Risk Prediction system uses advanced machine learning to assess your health risk based on 12 key health indicators. 
+                    The model has been trained on thousands of healthcare records to provide accurate, personalized health risk assessments.
+                </p>
+                <p>
+                    <strong>Research-Backed:</strong> This platform is built on peer-reviewed research and implements a hybrid autoencoder + ANN architecture 
+                    for optimal accuracy and interpretability.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .stat-item {
+        padding: 10px 0;
+    }
+    
+    .hero-section {
+        animation: slideInUp 0.8s ease-out;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
