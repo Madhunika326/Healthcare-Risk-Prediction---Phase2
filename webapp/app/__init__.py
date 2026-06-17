@@ -55,6 +55,7 @@ def create_app(config_name=None):
     from app.routes.dashboard import dashboard_bp
     from app.routes.api import api_bp
     from app.routes.admin import admin_bp
+    from app.routes.advisor import advisor_bp
     from app.routes.export import export_bp
     
     app.register_blueprint(main_bp)
@@ -63,6 +64,7 @@ def create_app(config_name=None):
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(advisor_bp, url_prefix='/advisor')
     app.register_blueprint(export_bp, url_prefix='/export')
     
     # Create database tables

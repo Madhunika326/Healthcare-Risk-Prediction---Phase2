@@ -6,6 +6,8 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db
+from sqlalchemy import func
+from app.models.prediction import Prediction
 
 
 class User(UserMixin, db.Model):
@@ -25,6 +27,7 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
+    is_advisor = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
     last_login = db.Column(db.DateTime)
     
@@ -55,7 +58,8 @@ class User(UserMixin, db.Model):
     
     def get_average_risk_score(self):
         """Get average risk score of user's predictions"""
-        avg = db.session.query(db.func.avg(Prediction.health_risk_score)).filter_by(user_id=self.id).scalar()
+        from app.models.prediction import Prediction
+        avg = db.session.query(func.avg(Prediction.health_risk_score)).filter(Prediction.user_id == self.id).scalar()
         return round(avg, 2) if avg else None
     
     def get_risk_distribution(self):

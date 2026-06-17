@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Advisor Dashboard - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="fw-bold" style="color: #1E293B;">
+            <i class="fas fa-stethoscope me-2" style="color: #14B8A6;"></i> Advisor Dashboard
+        </h1>
+        <p class="text-muted">Patient assessment management and clinical monitoring</p>
+    </div>
+</div>
+
+<!-- Key Statistics -->
+<div class="row mb-4">
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Total Patients</h6>
+                        <h3 class="fw-bold mb-0" style="color: #2563EB;">{{ total_patients }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #2563EB; opacity: 0.2;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">High Risk Patients</h6>
+                        <h3 class="fw-bold mb-0" style="color: #EF4444;">{{ high_risk_count }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #EF4444; opacity: 0.2;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Average Risk Score</h6>
+                        <h3 class="fw-bold mb-0" style="color: #F59E0B;">{{ avg_risk_score }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #F59E0B; opacity: 0.2;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Platform Status</h6>
+                        <h3 class="fw-bold mb-0" style="color: #14B8A6;">
+                            <i class="fas fa-check-circle"></i> Active
+                        </h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #14B8A6; opacity: 0.2;">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Panel -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white border-bottom">
+        <h6 class="mb-0 fw-bold">
+            <i class="fas fa-filter me-2"></i> Filter Patients
+        </h6>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label for="age_min" class="form-label">Age From</label>
+                <input type="number" class="form-control" id="age_min" name="age_min" value="{{ age_min }}" min="18" max="60">
+            </div>
+            <div class="col-md-3">
+                <label for="age_max" class="form-label">Age To</label>
+                <input type="number" class="form-control" id="age_max" name="age_max" value="{{ age_max }}" min="18" max="60">
+            </div>
+            <div class="col-md-3">
+                <label for="risk_category" class="form-label">Risk Category</label>
+                <select class="form-select" id="risk_category" name="risk_category">
+                    <option value="">All Categories</option>
+                    <option value="Low" {% if risk_category == 'Low' %}selected{% endif %}>Low Risk</option>
+                    <option value="Medium" {% if risk_category == 'Medium' %}selected{% endif %}>Medium Risk</option>
+                    <option value="High" {% if risk_category == 'High' %}selected{% endif %}>High Risk</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="symptom_min" class="form-label">Symptom Severity</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="symptom_min" name="symptom_min" value="{{ symptom_min }}" min="1" max="5" step="0.1">
+                    <span class="input-group-text">–</span>
+                    <input type="number" class="form-control" id="symptom_max" name="symptom_max" value="{{ symptom_max }}" min="1" max="5" step="0.1">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Patient Assessment Table -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-bottom">
+        <h6 class="mb-0 fw-bold">
+            <i class="fas fa-table me-2"></i> Patient Assessments
+        </h6>
+    </div>
+    <div class="card-body p-0">
+        {% if predictions.items %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead style="background-color: #F8FAFC;">
+                    <tr>
+                        <th style="color: #1E293B;">Patient ID</th>
+                        <th style="color: #1E293B;">Age</th>
+                        <th style="color: #1E293B;">Assessment Date</th>
+                        <th style="color: #1E293B;">Risk Score</th>
+                        <th style="color: #1E293B;">Category</th>
+                        <th style="color: #1E293B;">Symptom Severity</th>
+                        <th style="color: #1E293B;">Distance to Healthcare</th>
+                        <th style="color: #1E293B;">Clinical Notes</th>
+                        <th style="color: #1E293B;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions.items %}
+                    <tr>
+                        <td>
+                            <strong style="color: #0F172A;">{{ pred.user_id }}</strong>
+                        </td>
+                        <td style="color: #64748B;">{{ pred.age }}</td>
+                        <td style="color: #64748B;">
+                            <small>{{ pred.created_at.strftime('%b %d, %Y') }}</small>
+                        </td>
+                        <td>
+                            <strong style="color: #0F172A;">{{ "%.2f"|format(pred.health_risk_score) }}</strong>
+                        </td>
+                        <td>
+                            {% if pred.risk_category == 'High' %}
+                            <span class="badge bg-danger">High</span>
+                            {% elif pred.risk_category == 'Medium' %}
+                            <span class="badge bg-warning">Medium</span>
+                            {% else %}
+                            <span class="badge bg-success">Low</span>
+                            {% endif %}
+                        </td>
+                        <td style="color: #64748B;">
+                            <small>{{ "%.1f"|format(pred.symptom_severity) }}/5</small>
+                        </td>
+                        <td style="color: #64748B;">
+                            <small>{{ pred.distance_to_healthcare_km }} km</small>
+                        </td>
+                        <td>
+                            {% if pred.notes %}
+                            <small title="{{ pred.notes }}" style="color: #64748B;">{{ pred.notes[:30] }}...</small>
+                            {% else %}
+                            <small class="text-muted">No notes</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('advisor.patient_detail', prediction_id=pred.id) }}" class="btn btn-sm btn-outline-primary" title="View Patient">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted p-4 mb-0">No patient assessments found matching your filters.</p>
+        {% endif %}
+    </div>
+    <div class="card-footer bg-white border-top">
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-0">
+                {% if predictions.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('advisor.dashboard', page=predictions.prev_num, age_min=age_min, age_max=age_max, risk_category=risk_category, symptom_min=symptom_min, symptom_max=symptom_max) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in predictions.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num == predictions.page %}
+                        <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('advisor.dashboard', page=page_num, age_min=age_min, age_max=age_max, risk_category=risk_category, symptom_min=symptom_min, symptom_max=symptom_max) }}">{{ page_num }}</a></li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if predictions.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('advisor.dashboard', page=predictions.next_num, age_min=age_min, age_max=age_max, risk_category=risk_category, symptom_min=symptom_min, symptom_max=symptom_max) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}

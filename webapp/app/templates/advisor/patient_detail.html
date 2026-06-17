@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Detail - Advisor Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <a href="{{ url_for('advisor.dashboard') }}" class="btn btn-outline-secondary btn-sm mb-3">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+        <h1 class="fw-bold" style="color: #1E293B;">
+            <i class="fas fa-user-md me-2" style="color: #14B8A6;"></i> Patient Assessment
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Patient Information -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-user me-2"></i> Patient Information
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if user %}
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Username</label>
+                    <p style="color: #0F172A;"><strong>{{ user.username }}</strong></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Email</label>
+                    <p style="color: #0F172A;"><strong>{{ user.email }}</strong></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Full Name</label>
+                    <p style="color: #0F172A;"><strong>{{ user.get_full_name() or 'Not Set' }}</strong></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Age</label>
+                    <p style="color: #0F172A;"><strong>{{ user.age or 'Not Set' }}</strong></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Gender</label>
+                    <p style="color: #0F172A;"><strong>{{ user.gender or 'Not Set' }}</strong></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Residence</label>
+                    <p style="color: #0F172A;"><strong>{{ user.residence or 'Not Set' }}</strong></p>
+                </div>
+                {% else %}
+                <p class="text-muted">Patient information not available</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Assessment Summary -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-file-medical me-2"></i> Current Assessment
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Risk Score</label>
+                    <p>
+                        <h3 class="fw-bold" style="color: #2563EB;">{{ "%.2f"|format(prediction.health_risk_score) }}</h3>
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Risk Category</label>
+                    <p>
+                        {% if prediction.risk_category == 'High' %}
+                        <span class="badge bg-danger" style="font-size: 0.95rem;">High Risk</span>
+                        {% elif prediction.risk_category == 'Medium' %}
+                        <span class="badge bg-warning" style="font-size: 0.95rem;">Medium Risk</span>
+                        {% else %}
+                        <span class="badge bg-success" style="font-size: 0.95rem;">Low Risk</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Assessment Date</label>
+                    <p style="color: #0F172A;"><strong>{{ prediction.created_at.strftime('%B %d, %Y %H:%M') }}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Details -->
+    <div class="col-lg-8">
+        <!-- Clinical Features -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-stethoscope me-2"></i> Clinical Features
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Health Awareness Score</label>
+                        <div class="progress" style="height: 25px;">
+                            {% set awareness_pct = (prediction.health_awareness_score / 5) * 100 %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ awareness_pct }}%; background-color: #10B981;" aria-valuenow="{{ awareness_pct }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ awareness_pct|int }}%
+                            </div>
+                        </div>
+                        <small class="text-muted">{{ "%.1f"|format(prediction.health_awareness_score) }}/5</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Symptom Severity</label>
+                        <div class="progress" style="height: 25px;">
+                            {% set severity_pct = (prediction.symptom_severity / 5) * 100 %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ severity_pct }}%; background-color: #F59E0B;" aria-valuenow="{{ severity_pct }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ severity_pct|int }}%
+                            </div>
+                        </div>
+                        <small class="text-muted">{{ "%.1f"|format(prediction.symptom_severity) }}/5</small>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Distance to Healthcare</label>
+                        <p style="color: #0F172A;"><strong>{{ prediction.distance_to_healthcare_km }} km</strong></p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Delay in Seeking Care</label>
+                        <p style="color: #0F172A;"><strong>{{ prediction.delay_in_seeking_care_days }} days</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barriers to Care -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-exclamation-circle me-2"></i> Healthcare Barriers
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Fear of Cost</label>
+                        <div class="progress" style="height: 25px;">
+                            {% set cost_pct = (prediction.fear_of_cost * 100) %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ cost_pct }}%; background-color: #EF4444;" aria-valuenow="{{ cost_pct }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ cost_pct|int }}%
+                            </div>
+                        </div>
+                        <small class="text-muted">{{ "%.2f"|format(prediction.fear_of_cost) }} (0-1 scale)</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Fear of Hospital</label>
+                        <div class="progress" style="height: 25px;">
+                            {% set hospital_pct = (prediction.fear_of_hospital * 100) %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ hospital_pct }}%; background-color: #F59E0B;" aria-valuenow="{{ hospital_pct }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ hospital_pct|int }}%
+                            </div>
+                        </div>
+                        <small class="text-muted">{{ "%.2f"|format(prediction.fear_of_hospital) }} (0-1 scale)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demographic Information -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-info-circle me-2"></i> Demographic Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Education Level</label>
+                        <p style="color: #0F172A;"><strong>{{ prediction.education_level }}</strong></p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Income Level</label>
+                        <p style="color: #0F172A;"><strong>{{ prediction.income_level }}</strong></p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small">Insurance Status</label>
+                        <p style="color: #0F172A;"><strong>{{ prediction.insurance_status }}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clinical Notes -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-clipboard me-2"></i> Clinical Notes
+                </h6>
+            </div>
+            <div class="card-body">
+                <form id="notesForm" method="POST" action="{{ url_for('advisor.update_patient_notes', prediction_id=prediction.id) }}">
+                    <textarea class="form-control" id="notes" name="notes" rows="5" placeholder="Add clinical observations, recommendations, or follow-up notes...">{{ prediction.notes or '' }}</textarea>
+                    <button type="submit" class="btn btn-primary mt-3">
+                        <i class="fas fa-save me-1"></i> Save Notes
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Assessment History -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-history me-2"></i> Patient Assessment History
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                {% if patient_predictions %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background-color: #F8FAFC;">
+                            <tr>
+                                <th style="color: #1E293B;">Date</th>
+                                <th style="color: #1E293B;">Risk Score</th>
+                                <th style="color: #1E293B;">Category</th>
+                                <th style="color: #1E293B;">Symptoms</th>
+                                <th style="color: #1E293B;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pred in patient_predictions %}
+                            <tr>
+                                <td style="color: #64748B;">
+                                    <small>{{ pred.created_at.strftime('%b %d, %Y') }}</small>
+                                </td>
+                                <td>
+                                    <strong style="color: #0F172A;">{{ "%.2f"|format(pred.health_risk_score) }}</strong>
+                                </td>
+                                <td>
+                                    {% if pred.risk_category == 'High' %}
+                                    <span class="badge bg-danger">High</span>
+                                    {% elif pred.risk_category == 'Medium' %}
+                                    <span class="badge bg-warning">Medium</span>
+                                    {% else %}
+                                    <span class="badge bg-success">Low</span>
+                                    {% endif %}
+                                </td>
+                                <td style="color: #64748B;">{{ "%.1f"|format(pred.symptom_severity) }}/5</td>
+                                <td>
+                                    {% if pred.id == prediction.id %}
+                                    <span class="badge bg-primary">Current</span>
+                                    {% else %}
+                                    <a href="{{ url_for('advisor.patient_detail', prediction_id=pred.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted p-4 mb-0">No assessment history found</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('notesForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const notes = document.getElementById('notes').value;
+        
+        fetch('{{ url_for("advisor.update_patient_notes", prediction_id=prediction.id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ notes: notes })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Clinical notes updated successfully');
+            } else {
+                alert('Error updating notes: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+{% endblock %}

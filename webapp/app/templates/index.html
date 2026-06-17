@@ -53,7 +53,7 @@
                 <div class="card-body p-4">
                     <i class="fas fa-brain fa-4x mb-3" style="color: #2563EB;"></i>
                     <h5 class="card-title fw-bold mb-3">AI-Powered Prediction</h5>
-                    <p class="card-text text-muted">Hybrid Autoencoder + ANN model trained on verified healthcare data for accurate risk assessment.</p>
+                    <p class="card-text text-muted">Utilizes a hybrid Autoencoder for unsupervised feature extraction and an Artificial Neural Network (ANN) to predict personalized health risk scores.</p>
                 </div>
             </div>
         </a>
@@ -64,7 +64,7 @@
                 <div class="card-body p-4">
                     <i class="fas fa-shield-alt fa-4x mb-3" style="color: #10B981;"></i>
                     <h5 class="card-title fw-bold mb-3">Secure & Private</h5>
-                    <p class="card-text text-muted">Enterprise-grade encryption ensures your health data is protected and never shared with third parties.</p>
+                    <p class="card-text text-muted">Ensures enterprise-grade security and cryptographic privacy for all sensitive demographic, barrier-to-care, and personal clinical history data.</p>
                 </div>
             </div>
         </a>
@@ -75,7 +75,7 @@
                 <div class="card-body p-4">
                     <i class="fas fa-chart-line fa-4x mb-3" style="color: #14B8A6;"></i>
                     <h5 class="card-title fw-bold mb-3">Track & Monitor</h5>
-                    <p class="card-text text-muted">View your risk trends over time with interactive charts and comprehensive health analytics.</p>
+                    <p class="card-text text-muted">Enables real-time analytics on pre-treatment decision delays, tracking behavioral and environmental healthcare risks over time.</p>
                 </div>
             </div>
         </a>
@@ -166,34 +166,40 @@
         <h2 class="text-center fw-bold mb-5" style="color: #1E293B; font-size: 2rem;">Health Tips & Prevention</h2>
     </div>
     <div class="col-lg-4 mb-4">
-        <div class="card feature-card">
-            <div class="card-body p-4">
-                <h5 class="card-title fw-bold mb-3" style="color: #10B981;">
-                    <i class="fas fa-calendar-check me-2"></i> Regular Checkups
-                </h5>
-                <p class="card-text text-muted">Schedule regular health assessments to monitor your health status and catch early warning signs.</p>
+        <a href="#" class="text-decoration-none" onclick="showHealthTip('Regular Checkups', 'Schedule regular health assessments to monitor your health status and catch early warning signs. Early detection of health issues can significantly improve treatment outcomes and quality of life.'); return false;">
+            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #E0F7F4 0%, #F0FFFE 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #10B981;">
+                        <i class="fas fa-calendar-check me-2"></i> Regular Checkups
+                    </h5>
+                    <p class="card-text" style="color: #0F172A;">Schedule regular health assessments to monitor your health status and catch early warning signs.</p>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
     <div class="col-lg-4 mb-4">
-        <div class="card feature-card">
-            <div class="card-body p-4">
-                <h5 class="card-title fw-bold mb-3" style="color: #EF4444;">
-                    <i class="fas fa-heart me-2"></i> Healthy Lifestyle
-                </h5>
-                <p class="card-text text-muted">Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health.</p>
+        <a href="#" class="text-decoration-none" onclick="showHealthTip('Healthy Lifestyle', 'Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health. Physical activity reduces the risk of chronic diseases and improves mental health and well-being.'); return false;">
+            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #EF4444;">
+                        <i class="fas fa-heart me-2"></i> Healthy Lifestyle
+                    </h5>
+                    <p class="card-text" style="color: #0F172A;">Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health.</p>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
     <div class="col-lg-4 mb-4">
-        <div class="card feature-card">
-            <div class="card-body p-4">
-                <h5 class="card-title fw-bold mb-3" style="color: #2563EB;">
-                    <i class="fas fa-first-aid me-2"></i> Preventive Care
-                </h5>
-                <p class="card-text text-muted">Prevention is better than cure. Take proactive measures and follow medical recommendations seriously.</p>
+        <a href="#" class="text-decoration-none" onclick="showHealthTip('Preventive Care', 'Prevention is better than cure. Take proactive measures and follow medical recommendations seriously. Preventive healthcare includes vaccinations, screenings, and lifestyle modifications to reduce disease risk.'); return false;">
+            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #DBEAFE 0%, #F0F9FF 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #2563EB;">
+                        <i class="fas fa-first-aid me-2"></i> Preventive Care
+                    </h5>
+                    <p class="card-text" style="color: #0F172A;">Prevention is better than cure. Take proactive measures and follow medical recommendations seriously.</p>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 </div>
 
@@ -241,11 +247,13 @@
 <style>
     .feature-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
     }
 
     .feature-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 32px rgba(37, 99, 235, 0.2);
+        border-color: #2563EB;
     }
 
     a.text-decoration-none {
@@ -256,5 +264,89 @@
         text-decoration: none;
         color: inherit;
     }
+    
+    .health-tip-modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .health-tip-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 2rem;
+        border-radius: 12px;
+        border: none;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideDown {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .health-tip-close {
+        color: #64748B;
+        float: right;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .health-tip-close:hover {
+        color: #1E293B;
+    }
 </style>
+
+<script>
+    function showHealthTip(title, content) {
+        const modal = document.getElementById('healthTipModal') || createHealthTipModal();
+        document.getElementById('healthTipTitle').innerText = title;
+        document.getElementById('healthTipContent').innerText = content;
+        modal.style.display = 'block';
+    }
+    
+    function createHealthTipModal() {
+        const modal = document.createElement('div');
+        modal.id = 'healthTipModal';
+        modal.className = 'health-tip-modal';
+        modal.innerHTML = `
+            <div class="health-tip-content">
+                <span class="health-tip-close" onclick="closeHealthTip()">&times;</span>
+                <h4 id="healthTipTitle" style="color: #2563EB; margin-bottom: 1rem;"></h4>
+                <p id="healthTipContent" style="color: #64748B; line-height: 1.8;"></p>
+                <button class="btn btn-primary mt-3" onclick="closeHealthTip()">Close</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        return modal;
+    }
+    
+    function closeHealthTip() {
+        const modal = document.getElementById('healthTipModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('healthTipModal');
+        if (modal && event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}

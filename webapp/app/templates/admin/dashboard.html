@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Healthcare Risk Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="fw-bold" style="color: #1E293B;">
+            <i class="fas fa-lock me-2" style="color: #2563EB;"></i> Admin Dashboard
+        </h1>
+        <p class="text-muted">System management and analytics</p>
+    </div>
+</div>
+
+<!-- Key Statistics -->
+<div class="row mb-4">
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Total Users</h6>
+                        <h3 class="fw-bold mb-0" style="color: #2563EB;">{{ total_users }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #2563EB; opacity: 0.2;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Total Predictions</h6>
+                        <h3 class="fw-bold mb-0" style="color: #10B981;">{{ total_predictions }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #10B981; opacity: 0.2;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Admin Actions</h6>
+                        <h3 class="fw-bold mb-0" style="color: #F59E0B;">{{ total_admin_actions }}</h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #F59E0B; opacity: 0.2;">
+                        <i class="fas fa-history"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">System Health</h6>
+                        <h3 class="fw-bold mb-0" style="color: #14B8A6;">
+                            <i class="fas fa-check-circle"></i> Healthy
+                        </h3>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #14B8A6; opacity: 0.2;">
+                        <i class="fas fa-server"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Users -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-user-circle me-2" style="color: #2563EB;"></i> Recent Users
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_users %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background-color: #F8FAFC;">
+                            <tr>
+                                <th style="color: #1E293B;">Username</th>
+                                <th style="color: #1E293B;">Email</th>
+                                <th style="color: #1E293B;">Created</th>
+                                <th style="color: #1E293B;">Role</th>
+                                <th style="color: #1E293B;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>
+                                    <strong style="color: #0F172A;">{{ user.username }}</strong>
+                                </td>
+                                <td style="color: #64748B;">{{ user.email }}</td>
+                                <td style="color: #64748B;">{{ user.created_at.strftime('%b %d, %Y') }}</td>
+                                <td>
+                                    {% if user.is_admin %}
+                                    <span class="badge bg-danger">Admin</span>
+                                    {% elif user.is_advisor %}
+                                    <span class="badge bg-warning">Advisor</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">User</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.user_detail', user_id=user.id) }}" class="btn btn-sm btn-outline-primary" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted p-4 mb-0">No users found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-top">
+                <a href="{{ url_for('admin.users') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list me-1"></i> View All Users
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Audit Logs -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 fw-bold">
+                    <i class="fas fa-history me-2" style="color: #10B981;"></i> Recent System Activity
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_logs %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background-color: #F8FAFC;">
+                            <tr>
+                                <th style="color: #1E293B;">Action</th>
+                                <th style="color: #1E293B;">User</th>
+                                <th style="color: #1E293B;">Resource</th>
+                                <th style="color: #1E293B;">Timestamp</th>
+                                <th style="color: #1E293B;">IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_logs %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-info" style="font-weight: 600;">
+                                        {{ log.action.replace('_', ' ') }}
+                                    </span>
+                                </td>
+                                <td style="color: #64748B;">
+                                    {% if log.user %}
+                                    {{ log.user.username }}
+                                    {% else %}
+                                    System
+                                    {% endif %}
+                                </td>
+                                <td style="color: #64748B;">{{ log.resource_type }} #{{ log.resource_id }}</td>
+                                <td style="color: #64748B;">{{ log.created_at.strftime('%b %d, %H:%M') }}</td>
+                                <td style="color: #64748B;">{{ log.ip_address or 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted p-4 mb-0">No activity found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-top">
+                <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list me-1"></i> View All Logs
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -45,9 +45,14 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}"><i class="fas fa-user me-2"></i> Profile</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('assessment.history') }}"><i class="fas fa-history me-2"></i> History</a></li>
-                            {% if current_user.is_admin %}
+                            {% if current_user.is_admin or current_user.is_advisor %}
                             <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            {% if current_user.is_admin %}
                             <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}"><i class="fas fa-lock me-2"></i> Admin Panel</a></li>
+                            {% endif %}
+                            {% if current_user.is_advisor %}
+                            <li><a class="dropdown-item" href="{{ url_for('advisor.dashboard') }}"><i class="fas fa-stethoscope me-2"></i> Advisor Dashboard</a></li>
                             {% endif %}
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
