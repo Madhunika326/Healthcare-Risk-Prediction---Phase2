@@ -49,33 +49,33 @@
     </div>
     <div class="col-lg-4 mb-4">
         <a href="{{ url_for('main.about') }}" class="text-decoration-none">
-            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #2563EB; cursor: pointer; transition: all 0.3s ease;">
+            <div class="card h-100 text-center feature-card feature-card-light" style="border-left: 4px solid #2563EB;">
                 <div class="card-body p-4">
-                    <i class="fas fa-brain fa-4x mb-3" style="color: #2563EB;"></i>
-                    <h5 class="card-title fw-bold mb-3">AI-Powered Prediction</h5>
-                    <p class="card-text text-muted">Utilizes a hybrid Autoencoder for unsupervised feature extraction and an Artificial Neural Network (ANN) to predict personalized health risk scores.</p>
+                    <i class="fas fa-brain fa-4x mb-3" style="color: #60A5FA;"></i>
+                    <h5 class="card-title fw-bold mb-3" style="color: #F8FAFC;">AI-Powered Prediction</h5>
+                    <p class="card-text" style="color: #E2E8F0;">Utilizes a hybrid Autoencoder for unsupervised feature extraction and an Artificial Neural Network (ANN) to predict personalized health risk scores.</p>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-lg-4 mb-4">
         <a href="{{ url_for('main.privacy') }}" class="text-decoration-none">
-            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #10B981; cursor: pointer; transition: all 0.3s ease;">
+            <div class="card h-100 text-center feature-card feature-card-light" style="border-left: 4px solid #10B981;">
                 <div class="card-body p-4">
-                    <i class="fas fa-shield-alt fa-4x mb-3" style="color: #10B981;"></i>
-                    <h5 class="card-title fw-bold mb-3">Secure & Private</h5>
-                    <p class="card-text text-muted">Ensures enterprise-grade security and cryptographic privacy for all sensitive demographic, barrier-to-care, and personal clinical history data.</p>
+                    <i class="fas fa-shield-alt fa-4x mb-3" style="color: #34D399;"></i>
+                    <h5 class="card-title fw-bold mb-3" style="color: #F8FAFC;">Secure & Private</h5>
+                    <p class="card-text" style="color: #E2E8F0;">Ensures enterprise-grade security and cryptographic privacy for all sensitive demographic, barrier-to-care, and personal clinical history data.</p>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-lg-4 mb-4">
         <a href="{{ url_for('dashboard.index') }}" class="text-decoration-none">
-            <div class="card h-100 text-center feature-card" style="border-left: 4px solid #14B8A6; cursor: pointer; transition: all 0.3s ease;">
+            <div class="card h-100 text-center feature-card feature-card-light" style="border-left: 4px solid #14B8A6;">
                 <div class="card-body p-4">
-                    <i class="fas fa-chart-line fa-4x mb-3" style="color: #14B8A6;"></i>
-                    <h5 class="card-title fw-bold mb-3">Track & Monitor</h5>
-                    <p class="card-text text-muted">Enables real-time analytics on pre-treatment decision delays, tracking behavioral and environmental healthcare risks over time.</p>
+                    <i class="fas fa-chart-line fa-4x mb-3" style="color: #2DD4BF;"></i>
+                    <h5 class="card-title fw-bold mb-3" style="color: #F8FAFC;">Track & Monitor</h5>
+                    <p class="card-text" style="color: #E2E8F0;">Enables real-time analytics on pre-treatment decision delays, tracking behavioral and environmental healthcare risks over time.</p>
                 </div>
             </div>
         </a>
@@ -167,36 +167,36 @@
     </div>
     <div class="col-lg-4 mb-4">
         <a href="#" class="text-decoration-none" onclick="showHealthTip('Regular Checkups', 'Schedule regular health assessments to monitor your health status and catch early warning signs. Early detection of health issues can significantly improve treatment outcomes and quality of life.'); return false;">
-            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
-                <div class="card-body p-4" style="background: linear-gradient(135deg, #E0F7F4 0%, #F0FFFE 100%);">
-                    <h5 class="card-title fw-bold mb-3" style="color: #10B981;">
+            <div class="card feature-card health-tip-card" style="cursor: pointer; border: 2px solid transparent;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #1E293B 0%, #334155 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #34D399;">
                         <i class="fas fa-calendar-check me-2"></i> Regular Checkups
                     </h5>
-                    <p class="card-text" style="color: #0F172A;">Schedule regular health assessments to monitor your health status and catch early warning signs.</p>
+                    <p class="card-text" style="color: #E2E8F0;">Schedule regular health assessments to monitor your health status and catch early warning signs.</p>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-lg-4 mb-4">
         <a href="#" class="text-decoration-none" onclick="showHealthTip('Healthy Lifestyle', 'Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health. Physical activity reduces the risk of chronic diseases and improves mental health and well-being.'); return false;">
-            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
-                <div class="card-body p-4" style="background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);">
-                    <h5 class="card-title fw-bold mb-3" style="color: #EF4444;">
+            <div class="card feature-card health-tip-card" style="cursor: pointer; border: 2px solid transparent;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #1E293B 0%, #334155 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #F87171;">
                         <i class="fas fa-heart me-2"></i> Healthy Lifestyle
                     </h5>
-                    <p class="card-text" style="color: #0F172A;">Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health.</p>
+                    <p class="card-text" style="color: #E2E8F0;">Maintain a balanced diet, regular exercise, and adequate sleep to support your overall health.</p>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-lg-4 mb-4">
         <a href="#" class="text-decoration-none" onclick="showHealthTip('Preventive Care', 'Prevention is better than cure. Take proactive measures and follow medical recommendations seriously. Preventive healthcare includes vaccinations, screenings, and lifestyle modifications to reduce disease risk.'); return false;">
-            <div class="card feature-card" style="cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;">
-                <div class="card-body p-4" style="background: linear-gradient(135deg, #DBEAFE 0%, #F0F9FF 100%);">
-                    <h5 class="card-title fw-bold mb-3" style="color: #2563EB;">
+            <div class="card feature-card health-tip-card" style="cursor: pointer; border: 2px solid transparent;">
+                <div class="card-body p-4" style="background: linear-gradient(135deg, #1E293B 0%, #334155 100%);">
+                    <h5 class="card-title fw-bold mb-3" style="color: #60A5FA;">
                         <i class="fas fa-first-aid me-2"></i> Preventive Care
                     </h5>
-                    <p class="card-text" style="color: #0F172A;">Prevention is better than cure. Take proactive measures and follow medical recommendations seriously.</p>
+                    <p class="card-text" style="color: #E2E8F0;">Prevention is better than cure. Take proactive measures and follow medical recommendations seriously.</p>
                 </div>
             </div>
         </a>

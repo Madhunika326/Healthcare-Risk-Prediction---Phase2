@@ -501,6 +501,98 @@ table tbody td {
     border-radius: 10px;
 }
 
+/* Dark Card Text Styling for WCAG Compliance */
+.dark-card {
+    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.dark-card h1,
+.dark-card h2,
+.dark-card h3,
+.dark-card h4,
+.dark-card h5,
+.dark-card h6,
+.dark-card .card-title,
+.dark-card .card-text,
+.dark-card p,
+.dark-card .lead {
+    color: #F8FAFC !important;
+}
+
+.dark-card .text-muted {
+    color: #CBD5E1 !important;
+}
+
+/* Light text for dark backgrounds */
+.text-light-alt {
+    color: #F8FAFC !important;
+}
+
+.text-lighter {
+    color: #E2E8F0 !important;
+}
+
+/* Form text on dark backgrounds */
+.form-dark .form-label,
+.form-dark label {
+    color: #E2E8F0 !important;
+    font-weight: 500;
+}
+
+.form-dark .form-text,
+.form-dark small {
+    color: #CBD5E1 !important;
+}
+
+.form-dark .form-control,
+.form-dark .form-select {
+    background: #334155;
+    border-color: #475569;
+    color: #F8FAFC;
+}
+
+.form-dark .form-control:focus,
+.form-dark .form-select:focus {
+    background: #475569;
+    border-color: #2563EB;
+    color: #FFFFFF;
+}
+
+/* Health Tips interactive cards */
+.health-tip-card {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.health-tip-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.health-tip-card .card-body {
+    cursor: pointer;
+}
+
+/* Feature card light text override */
+.feature-card-light .card-text,
+.feature-card-light p {
+    color: #F8FAFC !important;
+}
+
+.feature-card-light {
+    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card-light:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+    border-color: #2563EB;
+}
+
 .p-4 {
     padding: 1.5rem;
 }

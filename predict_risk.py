@@ -37,8 +37,9 @@ import json
 class RiskConfig:
     """Configuration for risk prediction system."""
     
-    # Model paths
-    MODEL_DIR = Path('models')
+    # Model paths - absolute based on predict_risk.py location
+    BASE_DIR = Path(__file__).resolve().parent
+    MODEL_DIR = BASE_DIR / 'models'
     PREPROCESSOR_PATH = MODEL_DIR / 'preprocessor.joblib'
     ENCODER_PATH = MODEL_DIR / 'encoder.keras'
     ANN_MODEL_PATH = MODEL_DIR / 'ann_model.keras'
