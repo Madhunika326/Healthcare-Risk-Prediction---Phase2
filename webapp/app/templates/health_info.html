@@ -1,14 +1,17 @@
 {% extends "base.html" %}
 
+{% block title %}Health Information - Healthcare Risk Prediction Platform{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <h3>Health Information</h3>
-                <p>Health information and education content here.</p>
-            </div>
-        </div>
-    </div>
+<section class="page-hero mb-4">
+    <span class="eyebrow">Health Information</span>
+    <h1>Practical prevention guidance</h1>
+    <p>General wellness reminders that support better healthcare outcomes and lower risk over time.</p>
+</section>
+
+<div class="row g-4">
+    <div class="col-md-4"><div class="insight-card h-100"><i class="fa-solid fa-heart"></i><h5>Preventive care</h5><p>Keep up with routine screenings, check-ups, and vaccinations.</p></div></div>
+    <div class="col-md-4"><div class="insight-card h-100"><i class="fa-solid fa-walking"></i><h5>Lifestyle</h5><p>Support health with regular movement, balanced meals, hydration, and sleep.</p></div></div>
+    <div class="col-md-4"><div class="insight-card h-100"><i class="fa-solid fa-clock"></i><h5>Early action</h5><p>Seek care early when symptoms persist instead of delaying treatment.</p></div></div>
 </div>
 {% endblock %}

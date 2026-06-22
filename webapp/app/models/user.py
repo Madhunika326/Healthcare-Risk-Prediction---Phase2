@@ -63,13 +63,28 @@ class User(UserMixin, db.Model):
         return round(avg, 2) if avg else None
     
     def get_risk_distribution(self):
-        """Get distribution of risk categories"""
+        """Get distribution of risk categories.
+
+        Handles stored values like 'Low', 'Medium', 'High' as well as
+        variants like 'Low Risk', 'Medium Risk', 'High Risk'.
+        """
         predictions = self.predictions.all()
         distribution = {'Low': 0, 'Medium': 0, 'High': 0}
-        
+
         for pred in predictions:
-            distribution[pred.risk_category] += 1
-        
+            raw = (pred.risk_category or '').strip()
+            # Normalise: strip " Risk" suffix, then title-case
+            normalised = raw.replace(' Risk', '').strip().title()
+            if normalised in distribution:
+                distribution[normalised] += 1
+            else:
+                # Prefix match fallback (e.g. 'HIGH' -> 'High')
+                for key in distribution:
+                    if raw.lower().startswith(key.lower()):
+                        distribution[key] += 1
+                        break
+                # Unknown values are silently skipped so we never crash
+
         return distribution
     
     def to_dict(self):

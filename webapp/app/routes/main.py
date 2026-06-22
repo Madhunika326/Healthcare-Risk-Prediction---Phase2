@@ -1,9 +1,9 @@
 """
 Main Routes
-Home, About, and public pages
+Public pages and platform information
 """
 
-from flask import Blueprint, render_template, jsonify, request
+from flask import Blueprint, render_template, jsonify
 from app.services.ml_service import get_ml_service
 
 main_bp = Blueprint('main', __name__)
@@ -20,8 +20,44 @@ def index():
 
 @main_bp.route('/about')
 def about():
-    """About project page"""
+    """About platform page"""
     return render_template('about.html')
+
+
+@main_bp.route('/register')
+def register_page():
+    """Public registration page"""
+    return render_template('auth/register.html')
+
+
+@main_bp.route('/login/user')
+def user_login_page():
+    """Public user login page"""
+    return render_template('auth/login.html')
+
+
+@main_bp.route('/login/admin')
+def admin_login_page():
+    """Public admin login page"""
+    return render_template('auth/login_admin.html')
+
+
+@main_bp.route('/research-paper')
+def research_paper():
+    """Research paper summary page"""
+    return render_template('research_paper.html')
+
+
+@main_bp.route('/contact')
+def contact():
+    """Contact page"""
+    return render_template('contact.html')
+
+
+@main_bp.route('/help-center')
+def help_center():
+    """Help center page"""
+    return render_template('help_center.html')
 
 
 @main_bp.route('/how-it-works')

@@ -1,6 +1,6 @@
 """
 Authentication Routes
-User registration, login, logout
+User and admin login flows
 """
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
@@ -12,11 +12,68 @@ from app.models.audit_log import AuditLog
 auth_bp = Blueprint('auth', __name__)
 
 
+def _redirect_after_login(user):
+    """Send users to the correct dashboard based on role."""
+    if user.is_admin:
+        return redirect(url_for('admin.dashboard'))
+    return redirect(url_for('dashboard.user_dashboard'))
+
+
+def _handle_login(expected_role):
+    """Shared login flow for user and admin access."""
+    if current_user.is_authenticated:
+        return _redirect_after_login(current_user)
+
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
+
+        if not username or not password:
+            flash('Username and password required', 'danger')
+            return render_template('auth/login.html' if expected_role == 'user' else 'auth/login_admin.html')
+
+        user = User.query.filter_by(username=username).first()
+        if not user or not user.check_password(password):
+            flash('Invalid username or password', 'danger')
+            return render_template('auth/login.html' if expected_role == 'user' else 'auth/login_admin.html')
+
+        if not user.is_active:
+            flash('Your account has been disabled', 'warning')
+            return render_template('auth/login.html' if expected_role == 'user' else 'auth/login_admin.html')
+
+        if expected_role == 'admin' and not user.is_admin:
+            flash('Admin access required', 'danger')
+            return render_template('auth/login_admin.html')
+
+        if expected_role == 'user' and user.is_admin:
+            flash('Please use the admin login for administrator access', 'warning')
+            return render_template('auth/login.html')
+
+        login_user(user, remember=bool(request.form.get('remember')))
+
+        from datetime import datetime
+        user.last_login = datetime.utcnow()
+        db.session.commit()
+
+        AuditLog.log_action(
+            user_id=user.id,
+            action=f'{expected_role.upper()}_LOGIN',
+            resource_type='User',
+            resource_id=user.id,
+            ip_address=request.remote_addr,
+            user_agent=request.user_agent.string if request.user_agent else None
+        )
+
+        return _redirect_after_login(user)
+
+    return render_template('auth/login.html' if expected_role == 'user' else 'auth/login_admin.html')
+
+
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     """User registration"""
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return _redirect_after_login(current_user)
     
     if request.method == 'POST':
         username = request.form.get('username')
@@ -63,54 +120,27 @@ def register():
         )
         
         flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.user_login'))
     
     return render_template('auth/register.html')
 
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/login')
 def login():
+    """Legacy login redirect"""
+    return redirect(url_for('auth.user_login'))
+
+
+@auth_bp.route('/login/user', methods=['GET', 'POST'])
+def user_login():
     """User login"""
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        
-        if not username or not password:
-            flash('Username and password required', 'danger')
-            return render_template('auth/login.html')
-        
-        user = User.query.filter_by(username=username).first()
-        
-        if user and user.check_password(password):
-            if not user.is_active:
-                flash('Your account has been disabled', 'warning')
-                return render_template('auth/login.html')
-            
-            login_user(user, remember=request.form.get('remember'))
-            
-            # Update last login
-            from datetime import datetime
-            user.last_login = datetime.utcnow()
-            db.session.commit()
-            
-            # Log action
-            AuditLog.log_action(
-                user_id=user.id,
-                action='USER_LOGIN',
-                resource_type='User',
-                resource_id=user.id,
-                ip_address=request.remote_addr
-            )
-            
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.index'))
-        
-        flash('Invalid username or password', 'danger')
-    
-    return render_template('auth/login.html')
+    return _handle_login('user')
+
+
+@auth_bp.route('/login/admin', methods=['GET', 'POST'])
+def admin_login():
+    """Admin login"""
+    return _handle_login('admin')
 
 
 @auth_bp.route('/logout')
@@ -122,7 +152,8 @@ def logout():
         action='USER_LOGOUT',
         resource_type='User',
         resource_id=current_user.id,
-        ip_address=request.remote_addr
+        ip_address=request.remote_addr,
+        user_agent=request.user_agent.string if request.user_agent else None
     )
     
     logout_user()

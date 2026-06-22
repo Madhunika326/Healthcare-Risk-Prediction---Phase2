@@ -1,202 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Assessment Form - Healthcare Risk Prediction{% endblock %}
+{% block title %}Assessment - Healthcare Risk Prediction Platform{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 offset-lg-2">
-        <div class="card shadow-lg">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-stethoscope"></i> Healthcare Risk Assessment</h4>
-            </div>
-            <div class="card-body p-4">
-                <p class="text-muted mb-4">
-                    Please fill out all fields accurately. This information will be used to predict your health risk score.
-                </p>
+<section class="page-hero mb-4">
+    <span class="eyebrow">Assessment</span>
+    <h1>Complete a healthcare risk assessment</h1>
+    <p>Provide current patient indicators to generate a personalized health risk report.</p>
+</section>
 
-                <!-- Progress Bar -->
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="form-label mb-0"><strong>Form Progress</strong></label>
-                        <span id="progressPercent" class="badge bg-primary">0%</span>
-                    </div>
-                    <div class="progress" style="height: 25px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                             id="progressBar" role="progressbar" style="width: 0%;" 
-                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-
-                <form method="POST" action="{{ url_for('assessment.predict') }}" id="assessmentForm" novalidate>
-                    <!-- Numerical Inputs Section -->
-                    <h5 class="mb-3">Health Indicators</h5>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="Age" class="form-label">Age (18-60 years)</label>
-                            <input type="number" class="form-control" id="Age" name="Age" 
-                                   min="18" max="60" required>
-                            <small class="form-text text-muted">Your current age</small>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Health_Awareness_Score" class="form-label">Health Awareness Score (1-5)</label>
-                            <div class="input-group">
-                                <input type="range" class="form-range" id="Health_Awareness_Score" 
-                                       name="Health_Awareness_Score" min="1" max="5" value="3" 
-                                       oninput="updateValue(this)">
-                                <span class="input-group-text" id="Health_Awareness_Display">3</span>
-                            </div>
-                            <small class="form-text text-muted">1=Low awareness, 5=High awareness</small>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="Symptom_Severity" class="form-label">Symptom Severity (1-5)</label>
-                            <div class="input-group">
-                                <input type="range" class="form-range" id="Symptom_Severity" 
-                                       name="Symptom_Severity" min="1" max="5" value="3"
-                                       oninput="updateValue(this)">
-                                <span class="input-group-text" id="Symptom_Severity_Display">3</span>
-                            </div>
-                            <small class="form-text text-muted">1=Mild, 5=Severe</small>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Distance_to_Healthcare_km" class="form-label">Distance to Healthcare (1-49 km)</label>
-                            <input type="number" class="form-control" id="Distance_to_Healthcare_km" 
-                                   name="Distance_to_Healthcare_km" min="1" max="49" step="0.1" required>
-                            <small class="form-text text-muted">Distance to nearest healthcare facility</small>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="Fear_of_Cost" class="form-label">Fear of Cost (0-1)</label>
-                            <div class="input-group">
-                                <input type="range" class="form-range" id="Fear_of_Cost" 
-                                       name="Fear_of_Cost" min="0" max="1" step="0.1" value="0.5"
-                                       oninput="updateValue(this)">
-                                <span class="input-group-text" id="Fear_of_Cost_Display">0.5</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="Fear_of_Hospital" class="form-label">Fear of Hospital (0-1)</label>
-                            <div class="input-group">
-                                <input type="range" class="form-range" id="Fear_of_Hospital" 
-                                       name="Fear_of_Hospital" min="0" max="1" step="0.1" value="0.5"
-                                       oninput="updateValue(this)">
-                                <span class="input-group-text" id="Fear_of_Hospital_Display">0.5</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="Delay_in_Seeking_Care_Days" class="form-label">Delay in Care (0-119 days)</label>
-                            <input type="number" class="form-control" id="Delay_in_Seeking_Care_Days" 
-                                   name="Delay_in_Seeking_Care_Days" min="0" max="119" required>
-                            <small class="form-text text-muted">Days delayed in seeking care</small>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Categorical Inputs Section -->
-                    <h5 class="mb-3">Personal Information</h5>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="Gender" class="form-label">Gender</label>
-                            <select class="form-select" id="Gender" name="Gender" required>
-                                <option value="">-- Select Gender --</option>
-                                {% for gender in valid_categories.Gender %}
-                                <option value="{{ gender }}">{{ gender }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Residence" class="form-label">Residence</label>
-                            <select class="form-select" id="Residence" name="Residence" required>
-                                <option value="">-- Select Residence --</option>
-                                {% for res in valid_categories.Residence %}
-                                <option value="{{ res }}">{{ res }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="Education_Level" class="form-label">Education Level</label>
-                            <select class="form-select" id="Education_Level" name="Education_Level" required>
-                                <option value="">-- Select Education Level --</option>
-                                {% for edu in valid_categories.Education_Level %}
-                                <option value="{{ edu }}">{{ edu }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Income_Level" class="form-label">Income Level</label>
-                            <select class="form-select" id="Income_Level" name="Income_Level" required>
-                                <option value="">-- Select Income Level --</option>
-                                {% for income in valid_categories.Income_Level %}
-                                <option value="{{ income }}">{{ income }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="Insurance_Status" class="form-label">Insurance Status</label>
-                            <select class="form-select" id="Insurance_Status" name="Insurance_Status" required>
-                                <option value="">-- Select Insurance Status --</option>
-                                {% for status in valid_categories.Insurance_Status %}
-                                <option value="{{ status }}">{{ status }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Submit Button -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-check-circle"></i> Get Your Risk Assessment
-                        </button>
-                    </div>
-                </form>
-            </div>
+<div class="feature-panel">
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label mb-0 fw-semibold">Form Progress</label>
+            <span id="progressPercent" class="badge bg-primary">0%</span>
         </div>
-
-        <!-- Info Card -->
-        <div class="card mt-4 bg-light">
-            <div class="card-body">
-                <h6 class="card-title"><i class="fas fa-info-circle"></i> Information</h6>
-                <ul class="small mb-0">
-                    <li>All fields are required for accurate prediction</li>
-                    <li>Your responses should reflect your current health status</li>
-                    <li>Results are based on machine learning model trained on healthcare data</li>
-                    <li>This is not a substitute for professional medical advice</li>
-                </ul>
-            </div>
-        </div>
+        <div class="progress" style="height: 12px;"><div class="progress-bar bg-success" id="progressBar" style="width: 0%"></div></div>
     </div>
+
+    <form method="POST" action="{{ url_for('assessment.predict') }}" id="assessmentForm" novalidate>
+        <div class="row g-3">
+            <div class="col-md-6"><label class="form-label" for="Age">Age</label><input class="form-control" id="Age" name="Age" type="number" min="18" max="60" required></div>
+            <div class="col-md-6"><label class="form-label" for="Distance_to_Healthcare_km">Distance to Healthcare (km)</label><input class="form-control" id="Distance_to_Healthcare_km" name="Distance_to_Healthcare_km" type="number" min="1" max="49" step="0.1" required></div>
+            <div class="col-md-6"><label class="form-label" for="Health_Awareness_Score">Health Awareness Score</label><div class="input-group"><input class="form-range" id="Health_Awareness_Score" name="Health_Awareness_Score" type="range" min="1" max="5" value="3" oninput="updateValue(this)"><span class="input-group-text" id="Health_Awareness_Score_Display">3</span></div></div>
+            <div class="col-md-6"><label class="form-label" for="Symptom_Severity">Symptom Severity</label><div class="input-group"><input class="form-range" id="Symptom_Severity" name="Symptom_Severity" type="range" min="1" max="5" value="3" oninput="updateValue(this)"><span class="input-group-text" id="Symptom_Severity_Display">3</span></div></div>
+            <div class="col-md-4"><label class="form-label" for="Fear_of_Cost">Fear of Cost</label><div class="input-group"><input class="form-range" id="Fear_of_Cost" name="Fear_of_Cost" type="range" min="0" max="1" step="0.1" value="0.5" oninput="updateValue(this)"><span class="input-group-text" id="Fear_of_Cost_Display">0.5</span></div></div>
+            <div class="col-md-4"><label class="form-label" for="Fear_of_Hospital">Fear of Hospital</label><div class="input-group"><input class="form-range" id="Fear_of_Hospital" name="Fear_of_Hospital" type="range" min="0" max="1" step="0.1" value="0.5" oninput="updateValue(this)"><span class="input-group-text" id="Fear_of_Hospital_Display">0.5</span></div></div>
+            <div class="col-md-4"><label class="form-label" for="Delay_in_Seeking_Care_Days">Delay in Seeking Care</label><input class="form-control" id="Delay_in_Seeking_Care_Days" name="Delay_in_Seeking_Care_Days" type="number" min="0" max="119" required></div>
+            <div class="col-md-6"><label class="form-label" for="Gender">Gender</label><select class="form-select" id="Gender" name="Gender" required><option value="">Select</option>{% for gender in valid_categories.Gender %}<option value="{{ gender }}">{{ gender }}</option>{% endfor %}</select></div>
+            <div class="col-md-6"><label class="form-label" for="Residence">Residence</label><select class="form-select" id="Residence" name="Residence" required><option value="">Select</option>{% for res in valid_categories.Residence %}<option value="{{ res }}">{{ res }}</option>{% endfor %}</select></div>
+            <div class="col-md-6"><label class="form-label" for="Education_Level">Education Level</label><select class="form-select" id="Education_Level" name="Education_Level" required><option value="">Select</option>{% for edu in valid_categories.Education_Level %}<option value="{{ edu }}">{{ edu }}</option>{% endfor %}</select></div>
+            <div class="col-md-6"><label class="form-label" for="Income_Level">Income Level</label><select class="form-select" id="Income_Level" name="Income_Level" required><option value="">Select</option>{% for income in valid_categories.Income_Level %}<option value="{{ income }}">{{ income }}</option>{% endfor %}</select></div>
+            <div class="col-md-6"><label class="form-label" for="Insurance_Status">Insurance Status</label><select class="form-select" id="Insurance_Status" name="Insurance_Status" required><option value="">Select</option>{% for status in valid_categories.Insurance_Status %}<option value="{{ status }}">{{ status }}</option>{% endfor %}</select></div>
+        </div>
+        <div class="d-grid mt-4"><button type="submit" class="btn btn-accent btn-lg">Generate Risk Report</button></div>
+    </form>
+</div>
+
+<div class="feature-panel mt-4">
+    <h4>Assessment Guidance</h4>
+    <p class="mb-0">Enter current patient data accurately. The resulting report includes risk level, key factors, recommendations, and follow-up guidance.</p>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 function updateValue(element) {
-    const displayId = element.id + '_Display';
-    const displayElement = document.getElementById(displayId);
-    if (displayElement) {
-        displayElement.textContent = element.value;
-    }
+    const display = document.getElementById(element.id + '_Display');
+    if (display) display.textContent = element.value;
     updateProgress();
 }
 
@@ -204,45 +55,12 @@ function updateProgress() {
     const form = document.getElementById('assessmentForm');
     const inputs = form.querySelectorAll('input[required], select[required]');
     let filled = 0;
-    
-    inputs.forEach(input => {
-        if (input.value && input.value.trim() !== '') {
-            filled++;
-        }
-    });
-    
-    const percentage = Math.round((filled / inputs.length) * 100);
-    document.getElementById('progressBar').style.width = percentage + '%';
-    document.getElementById('progressBar').setAttribute('aria-valuenow', percentage);
-    document.getElementById('progressPercent').textContent = percentage + '%';
+    inputs.forEach(input => { if (input.value && input.value.trim() !== '') filled += 1; });
+    const percent = Math.round((filled / inputs.length) * 100);
+    document.getElementById('progressBar').style.width = percent + '%';
+    document.getElementById('progressPercent').textContent = percent + '%';
 }
-
-// Update progress on input change
-document.getElementById('assessmentForm').addEventListener('change', function(e) {
-    if (e.target.required) {
-        updateProgress();
-    }
-});
-
-document.getElementById('assessmentForm').addEventListener('input', function(e) {
-    if (e.target.required) {
-        updateProgress();
-    }
-});
-
-document.getElementById('assessmentForm').addEventListener('submit', function(e) {
-    // Simple client-side validation
-    const age = parseInt(document.getElementById('Age').value);
-    if (age < 18 || age > 60) {
-        e.preventDefault();
-        alert('Age must be between 18 and 60');
-        return false;
-    }
-});
-
-// Initial progress calculation
-window.addEventListener('load', function() {
-    updateProgress();
-});
+document.getElementById('assessmentForm').addEventListener('input', updateProgress);
+window.addEventListener('load', updateProgress);
 </script>
 {% endblock %}

@@ -1,222 +1,60 @@
 {% extends "base.html" %}
 
-{% block title %}User Detail - Admin Dashboard{% endblock %}
+{% block title %}User Detail - Healthcare Risk Prediction Platform{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <a href="{{ url_for('admin.users') }}" class="btn btn-outline-secondary btn-sm mb-3">
-            <i class="fas fa-arrow-left me-1"></i> Back to Users
-        </a>
-        <h1 class="fw-bold" style="color: #1E293B;">
-            <i class="fas fa-user-circle me-2" style="color: #2563EB;"></i> {{ user.username }}
-        </h1>
-    </div>
-</div>
+<section class="page-hero mb-4">
+    <span class="eyebrow">User Detail</span>
+    <h1>{{ user.username }}</h1>
+    <p>Account profile, access level, and assessment history.</p>
+</section>
 
-<div class="row">
-    <!-- User Information -->
-    <div class="col-lg-4 mb-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom">
-                <h6 class="mb-0 fw-bold">
-                    <i class="fas fa-user me-2"></i> User Information
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Email</label>
-                    <p style="color: #0F172A;"><strong>{{ user.email }}</strong></p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Full Name</label>
-                    <p style="color: #0F172A;"><strong>{{ user.get_full_name() or 'Not Set' }}</strong></p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Age</label>
-                    <p style="color: #0F172A;"><strong>{{ user.age or 'Not Set' }}</strong></p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Gender</label>
-                    <p style="color: #0F172A;"><strong>{{ user.gender or 'Not Set' }}</strong></p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Residence</label>
-                    <p style="color: #0F172A;"><strong>{{ user.residence or 'Not Set' }}</strong></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Account Status -->
-        <div class="card shadow-sm border-0 mt-4">
-            <div class="card-header bg-white border-bottom">
-                <h6 class="mb-0 fw-bold">
-                    <i class="fas fa-shield-alt me-2"></i> Account Status
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Status</label>
-                    <p>
-                        {% if user.is_active %}
-                        <span class="badge bg-success">Active</span>
-                        {% else %}
-                        <span class="badge bg-danger">Inactive</span>
-                        {% endif %}
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Role</label>
-                    <p>
-                        {% if user.is_admin %}
-                        <span class="badge bg-danger">Administrator</span>
-                        {% elif user.is_advisor %}
-                        <span class="badge bg-warning">Advisor</span>
-                        {% else %}
-                        <span class="badge bg-secondary">User</span>
-                        {% endif %}
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Member Since</label>
-                    <p style="color: #0F172A;"><strong>{{ user.created_at.strftime('%B %d, %Y') }}</strong></p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small">Last Login</label>
-                    <p style="color: #0F172A;">
-                        {% if user.last_login %}
-                        <strong>{{ user.last_login.strftime('%B %d, %Y %H:%M:%S') }}</strong>
-                        {% else %}
-                        <span class="text-muted">Never</span>
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="feature-panel h-100">
+            <h4>User Information</h4>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Name:</strong> {{ user.get_full_name() or 'Not set' }}</p>
+            <p><strong>Age:</strong> {{ user.age or 'Not set' }}</p>
+            <p><strong>Gender:</strong> {{ user.gender or 'Not set' }}</p>
+            <p><strong>Residence:</strong> {{ user.residence or 'Not set' }}</p>
+            <p><strong>Role:</strong> {% if user.is_admin %}Administrator{% elif user.is_advisor %}Advisor{% else %}User{% endif %}</p>
+            <p><strong>Status:</strong> {{ 'Active' if user.is_active else 'Inactive' }}</p>
         </div>
     </div>
-
-    <!-- User Statistics -->
     <div class="col-lg-8">
-        <!-- Health Statistics -->
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-header bg-white border-bottom">
-                <h6 class="mb-0 fw-bold">
-                    <i class="fas fa-chart-line me-2"></i> Health Statistics
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <h3 class="fw-bold" style="color: #2563EB;">{{ user.get_prediction_count() }}</h3>
-                            <p class="text-muted">Total Assessments</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <h3 class="fw-bold" style="color: #10B981;">{{ user.get_average_risk_score() or 'N/A' }}</h3>
-                            <p class="text-muted">Average Risk Score</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <div class="mb-2">
-                                {% set dist = user.get_risk_distribution() %}
-                                {% if dist.High > 0 %}
-                                <span class="badge bg-danger" style="font-size: 0.9rem;">High: {{ dist.High }}</span>
-                                {% endif %}
-                                {% if dist.Medium > 0 %}
-                                <span class="badge bg-warning" style="font-size: 0.9rem;">Medium: {{ dist.Medium }}</span>
-                                {% endif %}
-                                {% if dist.Low > 0 %}
-                                <span class="badge bg-success" style="font-size: 0.9rem;">Low: {{ dist.Low }}</span>
-                                {% endif %}
-                            </div>
-                            <p class="text-muted">Risk Distribution</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="feature-panel mb-4">
+            <h4>Health Statistics</h4>
+            <div class="row g-3 text-center">
+                <div class="col-md-4"><h3 class="text-primary">{{ user.get_prediction_count() }}</h3><small class="text-muted">Assessments</small></div>
+                <div class="col-md-4"><h3 class="text-success">{{ user.get_average_risk_score() or 'N/A' }}</h3><small class="text-muted">Average score</small></div>
+                <div class="col-md-4"><h3 class="text-warning">{{ user.get_risk_distribution().High }}</h3><small class="text-muted">High risk</small></div>
             </div>
         </div>
 
-        <!-- Recent Predictions -->
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white border-bottom">
-                <h6 class="mb-0 fw-bold">
-                    <i class="fas fa-list me-2"></i> Recent Predictions
-                </h6>
+        <div class="feature-panel">
+            <h4>Recent Predictions</h4>
+            {% if predictions %}
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead><tr><th>Date</th><th>Score</th><th>Category</th><th>Age</th><th>Details</th></tr></thead>
+                    <tbody>
+                        {% for pred in predictions %}
+                        <tr>
+                            <td>{{ pred.created_at.strftime('%d %b %Y') }}</td>
+                            <td>{{ '%.2f'|format(pred.health_risk_score) }}</td>
+                            <td><span class="badge bg-{{ 'success' if pred.risk_category == 'Low' else 'warning' if pred.risk_category == 'Medium' else 'danger' }}">{{ pred.risk_category }}</span></td>
+                            <td>{{ pred.age }}</td>
+                            <td>{{ pred.symptom_severity }}/5</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="card-body p-0">
-                {% if predictions %}
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead style="background-color: #F8FAFC;">
-                            <tr>
-                                <th style="color: #1E293B;">Date</th>
-                                <th style="color: #1E293B;">Risk Score</th>
-                                <th style="color: #1E293B;">Category</th>
-                                <th style="color: #1E293B;">Age</th>
-                                <th style="color: #1E293B;">Symptom Severity</th>
-                                <th style="color: #1E293B;">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for pred in predictions %}
-                            <tr>
-                                <td style="color: #64748B;">
-                                    <small>{{ pred.created_at.strftime('%b %d, %Y') }}</small>
-                                </td>
-                                <td>
-                                    <strong style="color: #0F172A;">{{ "%.2f"|format(pred.health_risk_score) }}</strong>
-                                </td>
-                                <td>
-                                    {% if pred.risk_category == 'High' %}
-                                    <span class="badge bg-danger">High</span>
-                                    {% elif pred.risk_category == 'Medium' %}
-                                    <span class="badge bg-warning">Medium</span>
-                                    {% else %}
-                                    <span class="badge bg-success">Low</span>
-                                    {% endif %}
-                                </td>
-                                <td style="color: #64748B;">{{ pred.age }}</td>
-                                <td style="color: #64748B;">{{ "%.1f"|format(pred.symptom_severity) }}/5</td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#pred-{{ pred.id }}" title="Show Details">
-                                        <i class="fas fa-expand"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="collapse" id="pred-{{ pred.id }}">
-                                <td colspan="6" style="background-color: #F8FAFC; padding: 1rem;">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p class="mb-2"><strong>Symptom Severity:</strong> {{ "%.1f"|format(pred.symptom_severity) }}/5</p>
-                                            <p class="mb-2"><strong>Distance to Healthcare:</strong> {{ pred.distance_to_healthcare_km }} km</p>
-                                            <p class="mb-2"><strong>Fear of Cost:</strong> {{ "%.2f"|format(pred.fear_of_cost) }}</p>
-                                            <p class="mb-2"><strong>Fear of Hospital:</strong> {{ "%.2f"|format(pred.fear_of_hospital) }}</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p class="mb-2"><strong>Delay in Care:</strong> {{ pred.delay_in_seeking_care_days }} days</p>
-                                            <p class="mb-2"><strong>Education:</strong> {{ pred.education_level }}</p>
-                                            <p class="mb-2"><strong>Income:</strong> {{ pred.income_level }}</p>
-                                            <p class="mb-2"><strong>Insurance:</strong> {{ pred.insurance_status }}</p>
-                                        </div>
-                                    </div>
-                                    {% if pred.notes %}
-                                    <p class="mt-3"><strong>Notes:</strong> {{ pred.notes }}</p>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %}
-                <p class="text-muted p-4 mb-0">No predictions found</p>
-                {% endif %}
-            </div>
+            {% else %}
+            <p class="text-muted mb-0">No predictions found.</p>
+            {% endif %}
         </div>
     </div>
 </div>
-
 {% endblock %}

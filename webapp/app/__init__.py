@@ -40,12 +40,13 @@ def create_app(config_name=None):
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.user_login'
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
     
     # Create instance and logs directory
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(app.config['REPORTS_FOLDER'], exist_ok=True)
     os.makedirs(os.path.dirname(app.config['LOG_FILE']), exist_ok=True)
     
     # Register blueprints
@@ -69,7 +70,10 @@ def create_app(config_name=None):
     
     # Create database tables
     with app.app_context():
+        from app.models import Report  # noqa: F401
         db.create_all()
+        from app.utils.db_migrations import ensure_user_role_columns
+        ensure_user_role_columns(app.config['SQLALCHEMY_DATABASE_URI'])
     
     # Setup logging
     setup_logging(app)

@@ -1,231 +1,74 @@
 {% extends "base.html" %}
 
-{% block title %}Prediction Result - Healthcare Risk Prediction{% endblock %}
+{% block title %}Assessment Result - Healthcare Risk Prediction Platform{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 offset-lg-2">
-        <!-- Risk Score Result Card -->
-        <div class="card shadow-lg mb-4">
-            <div class="card-body p-5">
-                <div class="text-center mb-4">
-                    <h3 class="mb-3">Your Health Risk Assessment Result</h3>
-                    
-                    <!-- Risk Score Display -->
-                    <div class="risk-score-display mb-4">
-                        <div class="score-circle" style="background-color: {{ '#28a745' if prediction.risk_category == 'Low' else '#ffc107' if prediction.risk_category == 'Medium' else '#dc3545' }}">
-                            <div class="score-value">{{ result.health_risk_score }}</div>
-                            <div class="score-label">Risk Score</div>
-                        </div>
-                    </div>
+<section class="page-hero mb-4">
+    <span class="eyebrow">Assessment Result</span>
+    <h1>Personalized health report</h1>
+    <p>Your latest score, risk factors, recommendations, and download options are shown below.</p>
+</section>
 
-                    <!-- Risk Category -->
-                    <h4 class="mb-1">Risk Category:</h4>
-                    <h2 class="mb-4">
-                        <span class="badge" style="background-color: {{ '#28a745' if prediction.risk_category == 'Low' else '#ffc107' if prediction.risk_category == 'Medium' else '#dc3545' }}; font-size: 1.5rem; padding: 15px 30px;">
-                            {{ prediction.risk_category }} RISK
-                        </span>
-                    </h2>
-
-                    <!-- Confidence -->
-                    <p class="text-muted">
-                        <i class="fas fa-chart-line"></i> Confidence: <strong>{{ result.confidence }}</strong>
-                    </p>
-                </div>
-
-                <hr>
-
-                <!-- Interpretation -->
-                <div class="alert alert-light border-2 border-primary">
-                    <h5><i class="fas fa-lightbulb"></i> What This Means</h5>
-                    {% if prediction.risk_category == 'Low' %}
-                    <p>Your health risk assessment indicates a LOW health risk. You're doing well! Continue maintaining your current health practices and regular check-ups.</p>
-                    {% elif prediction.risk_category == 'Medium' %}
-                    <p>Your health risk assessment indicates a MEDIUM health risk. Monitor your health parameters regularly and take preventive measures to improve your health status.</p>
-                    {% else %}
-                    <p>Your health risk assessment indicates a HIGH health risk. We recommend consulting with a healthcare provider for a comprehensive evaluation and personalized treatment plan.</p>
-                    {% endif %}
-                </div>
-            </div>
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="feature-panel h-100 text-center">
+            <p class="mb-2 text-muted">Risk Score</p>
+            <h1 class="display-4 fw-bold" style="color: {{ '#10B981' if prediction.risk_category == 'Low' else '#F59E0B' if prediction.risk_category == 'Medium' else '#EF4444' }};">{{ result.health_risk_score }}</h1>
+            <span class="badge bg-{{ 'success' if prediction.risk_category == 'Low' else 'warning' if prediction.risk_category == 'Medium' else 'danger' }} px-3 py-2">{{ prediction.risk_category }} Risk</span>
+            <p class="mt-3 mb-0 text-muted">Confidence: {{ result.confidence }}</p>
         </div>
-
-        <!-- Key Risk Factors -->
-        {% if result.risk_factors %}
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-danger text-white">
-                <h5 class="mb-0"><i class="fas fa-exclamation-circle"></i> Key Risk Factors</h5>
+    </div>
+    <div class="col-lg-8">
+        <div class="feature-panel h-100">
+            <h4>Personalized Health Insights</h4>
+            <div class="row g-3 mt-1">
+                <div class="col-md-6"><div class="insight-card"><i class="fa-solid fa-heart-pulse"></i><h5>Current Risk Level</h5><p>{{ prediction.risk_category }} risk indicates the need for {{ 'routine care' if prediction.risk_category == 'Low' else 'closer monitoring' if prediction.risk_category == 'Medium' else 'prompt follow-up' }}.</p></div></div>
+                <div class="col-md-6"><div class="insight-card"><i class="fa-solid fa-triangle-exclamation"></i><h5>Risk Factors</h5><p>{% if result.risk_factors %}{{ result.risk_factors|length }} key factors identified.{% else %}No major factors identified.{% endif %}</p></div></div>
+                <div class="col-md-6"><div class="insight-card"><i class="fa-solid fa-clipboard-check"></i><h5>Recommendations</h5><p>{% if result.recommendations %}{{ result.recommendations|length }} personalized recommendations available.{% else %}Continue routine preventive care.{% endif %}</p></div></div>
+                <div class="col-md-6"><div class="insight-card"><i class="fa-solid fa-calendar-check"></i><h5>Follow-up</h5><p>Retake the assessment after the recommended monitoring period.</p></div></div>
             </div>
-            <div class="card-body">
-                {% for factor in result.risk_factors %}
-                <div class="mb-3 pb-3 border-bottom">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1">{{ factor.factor }}</h6>
-                            <p class="text-muted small mb-0">{{ factor.description }}</p>
-                        </div>
-                        <span class="badge bg-{{ 'danger' if factor.severity == 'High' else 'warning' }}">{{ factor.severity }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Personalized Recommendations -->
-        {% if result.recommendations %}
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-heart-pulse"></i> Personalized Recommendations</h5>
-            </div>
-            <div class="card-body">
-                {% for rec in result.recommendations %}
-                <div class="mb-2">
-                    <p class="mb-1">
-                        <i class="fas fa-check-circle text-success"></i>
-                        {{ rec }}
-                    </p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Assessment Details -->
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-file-medical"></i> Assessment Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Age:</strong> {{ prediction.age }} years<br>
-                        <strong>Health Awareness:</strong> {{ prediction.health_awareness_score }}/5<br>
-                        <strong>Symptom Severity:</strong> {{ prediction.symptom_severity }}/5<br>
-                        <strong>Distance to Healthcare:</strong> {{ prediction.distance_to_healthcare_km }} km
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Gender:</strong> {{ prediction.gender }}<br>
-                        <strong>Education Level:</strong> {{ prediction.education_level }}<br>
-                        <strong>Income Level:</strong> {{ prediction.income_level }}<br>
-                        <strong>Insurance Status:</strong> {{ prediction.insurance_status }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="row mb-4">
-            <div class="col-md-6 mb-2">
-                <a href="{{ url_for('export.export_prediction_pdf', prediction_id=prediction.id) }}" class="btn btn-primary w-100">
-                    <i class="fas fa-file-pdf"></i> Download as PDF
-                </a>
-            </div>
-            <div class="col-md-6 mb-2">
-                <a href="{{ url_for('assessment.form') }}" class="btn btn-secondary w-100">
-                    <i class="fas fa-redo"></i> New Assessment
-                </a>
-            </div>
-        </div>
-
-        <!-- Information Box -->
-        <div class="alert alert-info">
-            <h6><i class="fas fa-info-circle"></i> Important Notice</h6>
-            <p class="small mb-0">
-                This assessment is based on artificial intelligence and should not be considered a substitute for professional medical advice. 
-                Always consult with qualified healthcare professionals for diagnosis, treatment, and health decisions.
-            </p>
         </div>
     </div>
 </div>
 
-<!-- Comparison Chart -->
-<div class="row mt-5">
-    <div class="col-lg-8 offset-lg-2">
-        <div class="card shadow-lg">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Risk Comparison with Population</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="comparisonChart" height="80"></canvas>
-            </div>
-        </div>
+{% if result.risk_factors %}
+<div class="feature-panel mb-4">
+    <h4>Key Risk Factors</h4>
+    <div class="row g-3">
+        {% for factor in result.risk_factors %}
+        <div class="col-md-6"><div class="insight-card"><h5>{{ factor.factor }}</h5><p class="mb-1">{{ factor.description }}</p><span class="badge bg-{{ 'danger' if factor.severity == 'High' else 'warning' }}">{{ factor.severity }}</span></div></div>
+        {% endfor %}
     </div>
 </div>
-{% endblock %}
+{% endif %}
 
-{% block extra_css %}
-<style>
-    .risk-score-display {
-        display: flex;
-        justify-content: center;
-    }
+{% if result.recommendations %}
+<div class="feature-panel mb-4">
+    <h4>Health Recommendations</h4>
+    <ul class="mb-0">
+        {% for rec in result.recommendations %}
+        <li class="mb-2">{{ rec }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 
-    .score-circle {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
+<div class="feature-panel mb-4">
+    <h4>Assessment Summary</h4>
+    <div class="row g-3">
+        <div class="col-md-3"><strong>Age</strong><br>{{ prediction.age }}</div>
+        <div class="col-md-3"><strong>Awareness</strong><br>{{ prediction.health_awareness_score }}/5</div>
+        <div class="col-md-3"><strong>Symptoms</strong><br>{{ prediction.symptom_severity }}/5</div>
+        <div class="col-md-3"><strong>Distance</strong><br>{{ prediction.distance_to_healthcare_km }} km</div>
+    </div>
+</div>
 
-    .score-value {
-        font-size: 3rem;
-        font-weight: bold;
-    }
+<div class="row g-3 mb-4">
+    <div class="col-md-6"><a class="btn btn-accent btn-lg w-100" href="{{ url_for('export.export_prediction_pdf', prediction_id=prediction.id) }}"><i class="fa-solid fa-file-pdf me-2"></i>Download PDF Report</a></div>
+    <div class="col-md-6"><a class="btn btn-outline-primary btn-lg w-100" href="{{ url_for('assessment.form') }}">New Assessment</a></div>
+</div>
 
-    .score-label {
-        font-size: 0.9rem;
-        margin-top: 10px;
-    }
-
-    .border-bottom {
-        border-bottom: 1px solid #e9ecef !important;
-    }
-</style>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Comparison chart
-    const ctx = document.getElementById('comparisonChart');
-    if (ctx) {
-        const yourScore = {{ result.health_risk_score }};
-        const populationAvg = 44.5;
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Your Score', 'Population Average'],
-                datasets: [{
-                    label: 'Health Risk Score',
-                    data: [yourScore, populationAvg],
-                    backgroundColor: ['#dc3545', '#6c757d'],
-                    borderRadius: 5,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-    }
-});
-</script>
+<div class="feature-panel">
+    <p class="mb-0 text-muted">This assessment is informational and should be reviewed with qualified healthcare professionals where appropriate.</p>
+</div>
 {% endblock %}

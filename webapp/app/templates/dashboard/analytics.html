@@ -1,160 +1,111 @@
 {% extends "base.html" %}
 
-{% block title %}Analytics - Healthcare Risk Prediction{% endblock %}
+{% block title %}Analytics - Healthcare Risk Prediction Platform{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-lg-12">
-        <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Advanced Analytics</h2>
-        <p class="text-muted">Detailed breakdown of your health assessment patterns and trends</p>
-    </div>
-</div>
+<section class="page-hero mb-4">
+    <span class="eyebrow">Analytics</span>
+    <h1>Risk trends and feature analysis</h1>
+    <p>Monitor score movement and identify recurring risk drivers over time.</p>
+</section>
 
-<!-- Time-based Analytics -->
-<div class="row mb-4">
+<div class="row g-4 mb-4">
     <div class="col-lg-8">
-        <div class="card shadow-lg">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i> Risk Score Trend Over Time</h5>
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">Risk Score Trend Over Time</h4>
+            {% if trend_scores %}
+            <div style="position:relative; height:260px;">
+                <canvas id="trendChart"></canvas>
             </div>
-            <div class="card-body">
-                <canvas id="trendChart" height="100"></canvas>
-            </div>
+            {% else %}
+            <p class="text-muted">No assessment data yet. Complete your first assessment to see trends.</p>
+            {% endif %}
         </div>
     </div>
     <div class="col-lg-4">
-        <div class="card shadow-lg">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Trend Summary</h5>
-            </div>
-            <div class="card-body">
-                <p class="text-muted">
-                    <strong>Latest Score:</strong> <span class="badge bg-danger">--</span>
-                </p>
-                <p class="text-muted">
-                    <strong>Highest Score:</strong> <span class="badge bg-warning">--</span>
-                </p>
-                <p class="text-muted">
-                    <strong>Lowest Score:</strong> <span class="badge bg-success">--</span>
-                </p>
-                <p class="text-muted">
-                    <strong>Average Score:</strong> <span class="badge bg-info">--</span>
-                </p>
-                <hr>
-                <small class="text-muted">
-                    Track your progress and monitor how your health risk score changes over time. 
-                    Use this information to guide your health decisions.
-                </small>
-            </div>
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">Trend Summary</h4>
+            {% if trend_scores %}
+            <p class="mb-2"><strong>Latest Score:</strong> <span class="text-primary fw-semibold">{{ trend_scores[-1] }}</span></p>
+            <p class="mb-2"><strong>Highest Score:</strong> <span class="text-danger fw-semibold">{{ trend_scores | max }}</span></p>
+            <p class="mb-2"><strong>Lowest Score:</strong> <span class="text-success fw-semibold">{{ trend_scores | min }}</span></p>
+            <p class="mb-0"><strong>Average Score:</strong> <span class="text-warning fw-semibold">{{ "%.1f" | format((trend_scores | sum) / (trend_scores | length)) }}</span></p>
+            {% else %}
+            <p class="text-muted mb-2"><strong>Latest Score:</strong> See latest assessment in your history.</p>
+            <p class="text-muted mb-2"><strong>Highest Score:</strong> Review the most recent high-risk case.</p>
+            <p class="text-muted mb-2"><strong>Lowest Score:</strong> Review your healthiest assessment.</p>
+            <p class="text-muted mb-0"><strong>Average Score:</strong> Use the dashboard overview for the running average.</p>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<!-- Feature Analysis -->
-<div class="row mb-4">
+<div class="row g-4 mb-4">
     <div class="col-lg-6">
-        <div class="card shadow-lg">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-bars me-2"></i> Feature Impact Analysis</h5>
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">Feature Impact Analysis</h4>
+            {% set total_preds = (trend_scores | length) %}
+            {% if total_preds > 0 %}
+            <div style="position:relative; height:220px;">
+                <canvas id="featureChart"></canvas>
             </div>
-            <div class="card-body">
-                <canvas id="featureChart" height="100"></canvas>
-            </div>
+            {% else %}
+            <p class="text-muted">Complete assessments to see feature impact analysis.</p>
+            {% endif %}
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="card shadow-lg">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Top Risk Factors</h5>
-            </div>
-            <div class="card-body">
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">Top Risk Factors</h4>
+            {% set factors = risk_factors_summary.items() | list %}
+            {% if factors %}
+                {% for factor, count in factors | sort(attribute=1, reverse=true) %}{% if loop.index <= 5 %}
+                {% set pct = [(count / (trend_scores|length) * 100), 100] | min | int if (trend_scores|length) > 0 else 0 %}
+                {% set color = 'danger' if loop.index == 1 else ('warning' if loop.index == 2 else 'info') %}
+                {% set label = 'High' if loop.index <= 2 else 'Medium' %}
                 <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Health Awareness Score</small>
-                        <small class="text-danger"><strong>High Impact</strong></small>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>{{ factor }}</span>
+                        <span class="text-{{ color }} fw-semibold">{{ label }}</span>
                     </div>
-                    <div class="progress" style="height: 20px;">
-                        <div class="progress-bar bg-danger" style="width: 100%"></div>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-{{ color }}" style="width: {{ [pct, 20]|max }}%"></div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Delay in Seeking Care</small>
-                        <small class="text-warning"><strong>High Impact</strong></small>
-                    </div>
-                    <div class="progress" style="height: 20px;">
-                        <div class="progress-bar bg-warning" style="width: 85%"></div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Distance to Healthcare</small>
-                        <small class="text-info"><strong>Medium Impact</strong></small>
-                    </div>
-                    <div class="progress" style="height: 20px;">
-                        <div class="progress-bar bg-info" style="width: 65%"></div>
-                    </div>
-                </div>
-            </div>
+                {% endif %}{% endfor %}
+            {% else %}
+            <p class="text-muted">No risk factors identified yet. Complete an assessment first.</p>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<!-- Demographic Insights -->
-<div class="row mb-4">
-    <div class="col-lg-8">
-        <div class="card shadow-lg">
-            <div class="card-header bg-dark text-white">
-                <h5 class="mb-0"><i class="fas fa-users me-2"></i> Your Demographics</h5>
-            </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-md-4 mb-3">
-                        <h6 class="text-muted">Age Group</h6>
-                        <h4 class="text-primary">-- years</h4>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="text-muted">Residence</h6>
-                        <h4 class="text-info">--</h4>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h6 class="text-muted">Education</h6>
-                        <h4 class="text-success">--</h4>
-                    </div>
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">User Context</h4>
+            <div class="row text-center">
+                <div class="col-4">
+                    <h5 class="mb-1 text-primary">{{ user_age }}</h5>
+                    <small class="text-muted">Age</small>
+                </div>
+                <div class="col-4">
+                    <h5 class="mb-1 text-primary" style="font-size:0.95rem;">{{ user_residence }}</h5>
+                    <small class="text-muted">Residence</small>
+                </div>
+                <div class="col-4">
+                    <h5 class="mb-1 text-primary" style="font-size:0.85rem;">{{ user_education }}</h5>
+                    <small class="text-muted">Education</small>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="card shadow-lg">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="fas fa-heart-pulse me-2"></i> Health Profile</h5>
-            </div>
-            <div class="card-body">
-                <p class="text-muted"><strong>Insurance:</strong> --</p>
-                <p class="text-muted"><strong>Income Level:</strong> --</p>
-                <p class="text-muted"><strong>Healthcare Access:</strong> -- km away</p>
-                <hr>
-                <small class="text-muted">Last assessment: --</small>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Export Section -->
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card shadow-lg bg-light border-0">
-            <div class="card-body text-center p-5">
-                <h5 class="mb-3">Export Your Analytics</h5>
-                <p class="text-muted mb-4">Download your complete health analytics report for your records or to share with healthcare providers.</p>
-                <button class="btn btn-primary me-2" onclick="alert('PDF export feature coming soon')">
-                    <i class="fas fa-file-pdf me-2"></i> Export as PDF
-                </button>
-                <button class="btn btn-secondary" onclick="alert('CSV export feature coming soon')">
-                    <i class="fas fa-file-csv me-2"></i> Export as CSV
-                </button>
-            </div>
+    <div class="col-lg-6">
+        <div class="feature-panel h-100">
+            <h4 class="mb-3">Export Analytics</h4>
+            <p class="text-muted">Download your assessment PDFs from the history page.</p>
+            <a class="btn btn-accent me-2" href="{{ url_for('assessment.history') }}">Open History</a>
+            <a class="btn btn-outline-primary" href="{{ url_for('assessment.form') }}">New Assessment</a>
         </div>
     </div>
 </div>
@@ -163,74 +114,66 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Trend Chart
+    // ── Trend Chart ──────────────────────────────────────
     const trendCtx = document.getElementById('trendChart');
-    if (trendCtx) {
-        new Chart(trendCtx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-                datasets: [{
-                    label: 'Risk Score',
-                    data: [45, 42, 48, 43, 40, 38],
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#667eea'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+    if (trendCtx && window.Chart) {
+        const trendLabels = {{ trend_labels | tojson }};
+        const trendScores = {{ trend_scores | tojson }};
+        if (trendLabels.length) {
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: trendLabels,
+                    datasets: [{
+                        label: 'Risk Score',
+                        data: trendScores,
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.12)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#2563EB'
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
                 }
-            }
-        });
+            });
+        }
     }
-    
-    // Feature Impact Chart
+
+    // ── Feature Chart ────────────────────────────────────
     const featureCtx = document.getElementById('featureChart');
-    if (featureCtx) {
-        new Chart(featureCtx, {
-            type: 'horizontalBar',
-            data: {
-                labels: ['Health Awareness', 'Delay in Care', 'Distance', 'Symptom Severity', 'Fear of Cost'],
-                datasets: [{
-                    label: 'Impact Score',
-                    data: [95, 85, 65, 60, 55],
-                    backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#28a745', '#6c757d'],
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+    if (featureCtx && window.Chart) {
+        const featureData = {{ feature_impact | tojson }};
+        const labels = Object.keys(featureData);
+        const values = Object.values(featureData);
+        if (labels.length && values.some(v => v > 0)) {
+            new Chart(featureCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Occurrences',
+                        data: values,
+                        backgroundColor: ['#EF4444', '#F59E0B', '#0EA5E9', '#10B981', '#64748B'],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
                 },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100
-                    }
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
                 }
-            }
-        });
+            });
+        }
     }
 });
 </script>

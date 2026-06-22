@@ -1,146 +1,131 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Healthcare Risk Prediction{% endblock %}
+{% block title %}Dashboard - Healthcare Risk Prediction Platform{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-lg-12">
-        <h2 class="mb-4"><i class="fas fa-chart-pie"></i> Your Dashboard</h2>
-    </div>
+<section class="page-hero mb-4">
+    <span class="eyebrow">User Dashboard</span>
+    <h1>Your healthcare overview</h1>
+    <p>Track risk score, assessment history, reports, and reminders in one place.</p>
+</section>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3"><div class="insight-card"><i class="fa-solid fa-notes-medical"></i><h5>{{ total_predictions }}</h5><p>Total assessments</p></div></div>
+    <div class="col-md-3"><div class="insight-card"><i class="fa-solid fa-chart-line"></i><h5>{{ avg_risk_score or 'N/A' }}</h5><p>Average risk score</p></div></div>
+    <div class="col-md-3"><div class="insight-card"><i class="fa-solid fa-circle-check"></i><h5>{{ risk_distribution.Low }}</h5><p>Low risk</p></div></div>
+    <div class="col-md-3"><div class="insight-card"><i class="fa-solid fa-triangle-exclamation"></i><h5>{{ risk_distribution.High }}</h5><p>High risk</p></div></div>
 </div>
 
-<!-- Statistics Row -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-heart fa-2x text-danger mb-3"></i>
-                <h6 class="text-muted">Total Assessments</h6>
-                <h3 class="text-primary">{{ total_predictions }}</h3>
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="feature-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Risk Distribution</h4>
+                <a class="btn btn-sm btn-accent" href="{{ url_for('dashboard.analytics') }}">View analytics</a>
             </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-chart-line fa-2x text-info mb-3"></i>
-                <h6 class="text-muted">Average Risk Score</h6>
-                <h3 class="text-info">{{ avg_risk_score or 'N/A' }}</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-circle text-success fa-2x mb-3"></i>
-                <h6 class="text-muted">Low Risk</h6>
-                <h3 class="text-success">{{ risk_distribution.Low }}</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-exclamation-circle fa-2x text-warning mb-3"></i>
-                <h6 class="text-muted">High Risk</h6>
-                <h3 class="text-warning">{{ risk_distribution.High }}</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Risk Distribution Chart -->
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Risk Distribution</h5>
-            </div>
-            <div class="card-body">
+            <div style="position:relative; height:260px; max-width:400px; margin:0 auto;">
                 <canvas id="riskDistributionChart"></canvas>
             </div>
         </div>
     </div>
-
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Recent Assessments</h5>
-            </div>
-            <div class="card-body">
-                {% if recent_predictions %}
-                    {% for pred in recent_predictions %}
-                    <div class="mb-3 pb-3 border-bottom">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Age: {{ pred.age }}</h6>
-                                <small class="text-muted">{{ pred.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-                            </div>
-                            <span class="badge bg-{{ 'success' if pred.risk_category == 'Low' else 'warning' if pred.risk_category == 'Medium' else 'danger' }}">
-                                {{ pred.health_risk_score }}
-                            </span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted">No assessments yet. <a href="{{ url_for('assessment.form') }}">Start one now</a></p>
-                {% endif %}
-            </div>
+    <div class="col-lg-4">
+        <div class="feature-panel h-100">
+            <h4>Upcoming Reminders</h4>
+            {% if upcoming_reminders %}
+            <ul class="list-unstyled mb-0">
+                {% for reminder in upcoming_reminders %}
+                <li class="mb-3"><i class="fa-solid fa-check text-success me-2"></i>{{ reminder }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="mb-0 text-muted">Complete your first assessment to see reminders and follow-up guidance.</p>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<!-- Quick Actions -->
-<div class="row">
-    <div class="col-md-3 mb-3">
-        <a href="{{ url_for('assessment.form') }}" class="btn btn-primary btn-block w-100">
-            <i class="fas fa-stethoscope"></i> New Assessment
-        </a>
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="feature-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Recent Assessments</h4>
+                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('assessment.history') }}">Full history</a>
+            </div>
+            {% if recent_predictions %}
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr><th>Date</th><th>Score</th><th>Category</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for pred in recent_predictions %}
+                        <tr>
+                            <td>{{ pred.created_at.strftime('%d %b %Y') }}</td>
+                            <td><strong>{{ '%.2f'|format(pred.health_risk_score) }}</strong></td>
+                            <td><span class="badge bg-{{ 'success' if pred.risk_category == 'Low' else 'warning' if pred.risk_category == 'Medium' else 'danger' }}">{{ pred.risk_category }}</span></td>
+                            <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('export.export_prediction_pdf', prediction_id=pred.id) }}">PDF</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No assessments yet. Start one from the assessment page.</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-md-3 mb-3">
-        <a href="{{ url_for('dashboard.analytics') }}" class="btn btn-info btn-block w-100">
-            <i class="fas fa-chart-bar"></i> Analytics
-        </a>
+    <div class="col-lg-4">
+        <div class="feature-panel h-100">
+            <h4>Recent Reports</h4>
+            {% if recent_reports %}
+            <ul class="list-unstyled mb-0">
+                {% for report in recent_reports %}
+                <li class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div>
+                            <div class="fw-semibold">{{ report.file_name }}</div>
+                            <small class="text-muted">{{ report.generated_at.strftime('%d %b %Y') }}</small>
+                        </div>
+                        <a class="btn btn-sm btn-accent" href="{{ url_for('export.export_prediction_pdf', prediction_id=report.prediction_id) }}">Download</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted mb-0">Reports will appear here after you download a PDF assessment.</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-md-3 mb-3">
-        <a href="{{ url_for('assessment.history') }}" class="btn btn-secondary btn-block w-100">
-            <i class="fas fa-history"></i> History
-        </a>
-    </div>
-    <div class="col-md-3 mb-3">
-        <a href="{{ url_for('dashboard.insights') }}" class="btn btn-warning btn-block w-100">
-            <i class="fas fa-lightbulb"></i> Insights
-        </a>
-    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-3"><a class="module-card text-center h-100" href="{{ url_for('assessment.form') }}"><i class="fa-solid fa-notes-medical"></i><h5>New Assessment</h5><p>Start a new patient risk check.</p></a></div>
+    <div class="col-md-3"><a class="module-card text-center h-100" href="{{ url_for('dashboard.analytics') }}"><i class="fa-solid fa-chart-column"></i><h5>Analytics</h5><p>View risk trends and feature patterns.</p></a></div>
+    <div class="col-md-3"><a class="module-card text-center h-100" href="{{ url_for('dashboard.insights') }}"><i class="fa-solid fa-lightbulb"></i><h5>Insights</h5><p>See personalized recommendations.</p></a></div>
+    <div class="col-md-3"><a class="module-card text-center h-100" href="{{ url_for('assessment.history') }}"><i class="fa-solid fa-clock-rotate-left"></i><h5>History</h5><p>Review all past assessments.</p></a></div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Risk Distribution Chart
     const ctx = document.getElementById('riskDistributionChart');
-    if (ctx) {
+    if (ctx && window.Chart) {
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Low Risk', 'Medium Risk', 'High Risk'],
                 datasets: [{
                     data: [{{ risk_distribution.Low }}, {{ risk_distribution.Medium }}, {{ risk_distribution.High }}],
-                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
+                    backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
