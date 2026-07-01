@@ -42,12 +42,6 @@ def admin_login_page():
     return render_template('auth/login_admin.html')
 
 
-@main_bp.route('/research-paper')
-def research_paper():
-    """Research paper summary page"""
-    return render_template('research_paper.html')
-
-
 @main_bp.route('/contact')
 def contact():
     """Contact page"""

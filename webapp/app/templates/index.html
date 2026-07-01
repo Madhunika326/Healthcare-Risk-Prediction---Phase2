@@ -7,12 +7,17 @@
     <div class="hero-grid">
         <div>
             <span class="eyebrow">Healthcare Analytics Platform</span>
-            <h1>AI-Powered Healthcare Risk Assessment</h1>
-            <p class="hero-copy">Predict healthcare risk using Autoencoder-based feature extraction and Artificial Neural Networks for personalized healthcare insights.</p>
+            <h1>Healthcare Risk Assessment</h1>
+            <p class="hero-copy">Predict healthcare risk using Autoencoder-based feature extraction and Artificial
+                Neural Networks for personalized healthcare insights.</p>
             <div class="d-flex flex-wrap gap-3">
-                <a class="btn btn-accent btn-lg px-4" href="{{ url_for('auth.user_login') if not current_user.is_authenticated else url_for('assessment.form') }}">Start Assessment</a>
+                <a class="btn btn-accent btn-lg px-4"
+                    href="{{ url_for('auth.user_login') if not current_user.is_authenticated else url_for('assessment.form') }}">Start
+                    Assessment</a>
                 <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('main.about') }}">Learn More</a>
-                <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('dashboard.user_dashboard') if current_user.is_authenticated and not current_user.is_admin else url_for('main.about') }}">View Dashboard</a>
+                <a class="btn btn-outline-light btn-lg px-4"
+                    href="{{ url_for('dashboard.user_dashboard') if current_user.is_authenticated and not current_user.is_admin else url_for('main.about') }}">View
+                    Dashboard</a>
             </div>
             <div class="hero-metrics mt-4">
                 <div><strong>{{ stats.total_assessments }}</strong><span>Assessments Processed</span></div>
@@ -21,18 +26,25 @@
             </div>
         </div>
         <div class="hero-visual">
-            <div class="hero-card">
-                <div class="hero-card-icon"><i class="fa-solid fa-shield-heart"></i></div>
-                <div>
-                    <h3>Clinical Decision Support</h3>
-                    <p>Purpose-built for hospitals, NGOs, and public health teams.</p>
+            <div class="workflow-track">
+                <div class="wf-step">
+                    <div class="wf-dot dot-sky"><i class="fa-solid fa-notes-medical"></i></div>
+                    <div class="wf-line"></div>
+                    <div class="wf-text"><strong>Guided Intake</strong><span>Structured health &amp; socioeconomic inputs</span></div>
                 </div>
-            </div>
-            <div class="hero-card hero-card-alt">
-                <div class="hero-card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <div>
-                    <h3>Risk Monitoring</h3>
-                    <p>Track trends, recommendations, and follow-up priorities.</p>
+                <div class="wf-step">
+                    <div class="wf-dot dot-blue"><i class="fa-solid fa-microchip"></i></div>
+                    <div class="wf-line"></div>
+                    <div class="wf-text"><strong>Feature Extraction</strong><span>Autoencoder discovers latent patterns</span></div>
+                </div>
+                <div class="wf-step">
+                    <div class="wf-dot dot-indigo"><i class="fa-solid fa-brain"></i></div>
+                    <div class="wf-line"></div>
+                    <div class="wf-text"><strong>Risk Classification</strong><span>Neural network predicts delay probability</span></div>
+                </div>
+                <div class="wf-step wf-step-last">
+                    <div class="wf-dot dot-teal"><i class="fa-solid fa-file-medical"></i></div>
+                    <div class="wf-text"><strong>Clinical Report</strong><span>Actionable recommendations &amp; PDF export</span></div>
                 </div>
             </div>
         </div>
@@ -46,9 +58,24 @@
         <p>Clear, patient-friendly guidance delivered in professional cards.</p>
     </div>
     <div class="row g-4">
-        <div class="col-md-4"><div class="insight-card"><i class="fa-solid fa-heart-pulse"></i><h5>Current Risk Level</h5><p>Immediate status based on your latest assessment.</p></div></div>
-        <div class="col-md-4"><div class="insight-card"><i class="fa-solid fa-triangle-exclamation"></i><h5>Risk Factors</h5><p>Key drivers behind the risk score and how to reduce them.</p></div></div>
-        <div class="col-md-4"><div class="insight-card"><i class="fa-solid fa-clipboard-check"></i><h5>Recommendations</h5><p>Health guidance, lifestyle suggestions, and follow-up advice.</p></div></div>
+        <div class="col-md-4">
+            <div class="insight-card"><i class="fa-solid fa-heart-pulse"></i>
+                <h5>Current Risk Level</h5>
+                <p>Immediate status based on your latest assessment.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="insight-card"><i class="fa-solid fa-triangle-exclamation"></i>
+                <h5>Risk Factors</h5>
+                <p>Key drivers behind the risk score and how to reduce them.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="insight-card"><i class="fa-solid fa-clipboard-check"></i>
+                <h5>Recommendations</h5>
+                <p>Health guidance, lifestyle suggestions, and follow-up advice.</p>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -58,9 +85,23 @@
         <h2>Built for real-world healthcare workflows</h2>
     </div>
     <div class="row g-4">
-        <div class="col-lg-4"><a class="module-card" href="{{ url_for('assessment.history') if current_user.is_authenticated else url_for('auth.user_login') }}"><i class="fa-solid fa-clock-rotate-left"></i><h5>Recent Assessments</h5><p>Review previous risk checks and follow-up activity.</p></a></div>
-        <div class="col-lg-4"><a class="module-card" href="{{ url_for('assessment.form') }}"><i class="fa-solid fa-notes-medical"></i><h5>Risk Assessment</h5><p>Complete the guided patient intake form.</p></a></div>
-        <div class="col-lg-4"><a class="module-card" href="{{ url_for('dashboard.user_dashboard') if current_user.is_authenticated and not current_user.is_admin else url_for('main.about') }}"><i class="fa-solid fa-gauge-high"></i><h5>Analytics Dashboard</h5><p>View outcomes, trends, and report downloads.</p></a></div>
+        <div class="col-lg-4"><a class="module-card"
+                href="{{ url_for('assessment.history') if current_user.is_authenticated else url_for('auth.user_login') }}"><i
+                    class="fa-solid fa-clock-rotate-left"></i>
+                <h5>Recent Assessments</h5>
+                <p>Review previous risk checks and follow-up activity.</p>
+            </a></div>
+        <div class="col-lg-4"><a class="module-card" href="{{ url_for('assessment.form') }}"><i
+                    class="fa-solid fa-notes-medical"></i>
+                <h5>Risk Assessment</h5>
+                <p>Complete the guided patient intake form.</p>
+            </a></div>
+        <div class="col-lg-4"><a class="module-card"
+                href="{{ url_for('dashboard.user_dashboard') if current_user.is_authenticated and not current_user.is_admin else url_for('main.about') }}"><i
+                    class="fa-solid fa-gauge-high"></i>
+                <h5>Analytics Dashboard</h5>
+                <p>View outcomes, trends, and report downloads.</p>
+            </a></div>
     </div>
 </section>
 
@@ -70,8 +111,18 @@
         <h2>Designed for hospitals and public health teams</h2>
     </div>
     <div class="row g-4">
-        <div class="col-md-6"><div class="feature-panel"><h5>Early risk detection</h5><p>Identify patients who need closer follow-up before complications escalate.</p></div></div>
-        <div class="col-md-6"><div class="feature-panel"><h5>Professional PDF reports</h5><p>Generate clean, shareable reports with risk score, factors, and recommendations.</p></div></div>
+        <div class="col-md-6">
+            <div class="feature-panel">
+                <h5>Early risk detection</h5>
+                <p>Identify patients who need closer follow-up before complications escalate.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="feature-panel">
+                <h5>Professional PDF reports</h5>
+                <p>Generate clean, shareable reports with risk score, factors, and recommendations.</p>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
@@ -140,40 +191,83 @@
         font-size: 0.92rem;
     }
 
-    .hero-card {
+    /* ── Workflow Pipeline ── */
+    .hero-visual {
         display: flex;
-        gap: 1rem;
-        padding: 1.2rem;
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(10px);
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
-    .hero-card-alt {
-        margin-top: 1rem;
-        transform: translateX(2.5rem);
+    .workflow-track {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 360px;
     }
 
-    .hero-card-icon {
-        width: 56px;
-        height: 56px;
+    .wf-step {
         display: grid;
-        place-items: center;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #38BDF8, #14B8A6);
-        color: white;
-        font-size: 1.35rem;
-        flex: 0 0 auto;
+        grid-template-columns: 44px 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 1.1rem;
     }
 
-    .hero-card h3,
-    .hero-card p {
-        margin: 0;
+    .wf-dot {
+        grid-column: 1;
+        grid-row: 1;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        z-index: 2;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .hero-card p {
-        color: rgba(226, 232, 240, 0.82);
+    .wf-step:hover .wf-dot {
+        transform: scale(1.12);
+    }
+
+    .dot-sky   { background: rgba(56,189,248,0.12); border: 2px solid #38BDF8; color: #7DD3FC; box-shadow: 0 0 14px rgba(56,189,248,0.18); }
+    .dot-blue  { background: rgba(37,99,235,0.12);  border: 2px solid #2563EB; color: #93C5FD; box-shadow: 0 0 14px rgba(37,99,235,0.18); }
+    .dot-indigo{ background: rgba(99,102,241,0.12); border: 2px solid #6366F1; color: #A5B4FC; box-shadow: 0 0 14px rgba(99,102,241,0.18); }
+    .dot-teal  { background: rgba(20,184,166,0.12); border: 2px solid #14B8A6; color: #5EEAD4; box-shadow: 0 0 14px rgba(20,184,166,0.18); }
+
+    .wf-line {
+        grid-column: 1;
+        grid-row: 2;
+        width: 2px;
+        height: 28px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+        justify-self: center;
+    }
+
+    .wf-step-last .wf-line { display: none; }
+
+    .wf-text {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 2px;
+    }
+
+    .wf-text strong {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        line-height: 1.2;
+    }
+
+    .wf-text span {
+        font-size: 0.82rem;
+        color: rgba(226,232,240,0.7);
+        line-height: 1.35;
+        margin-top: 0.1rem;
     }
 
     .section-block {
@@ -245,10 +339,6 @@
     @media (max-width: 991px) {
         .hero-grid {
             grid-template-columns: 1fr;
-        }
-
-        .hero-card-alt {
-            transform: none;
         }
 
         .hero-metrics {

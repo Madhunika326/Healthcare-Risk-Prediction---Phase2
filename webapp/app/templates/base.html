@@ -30,7 +30,6 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item" href="{{ url_for('main.privacy') }}">Privacy Policy</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.terms') }}">Terms</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.research_paper') }}">Research Paper</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.help_center') }}">Help Center</a></li>
                         </ul>
                     </li>
@@ -90,7 +89,7 @@
     <footer class="site-footer mt-auto">
         <div class="container py-5">
             <div class="row g-4">
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="footer-brand mb-3">Healthcare Risk Prediction Platform</div>
                     <p class="text-muted mb-0">AI-powered healthcare analytics for hospitals, NGOs, and public health organizations.</p>
                 </div>
@@ -110,12 +109,6 @@
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-4">
-                    <h6 class="footer-title">Research</h6>
-                    <ul class="footer-links">
-                        <li><a href="{{ url_for('main.research_paper') }}">Research Paper</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2">
                     <h6 class="footer-title">Links</h6>
                     <ul class="footer-links">
                         <li><a href="{{ url_for('main.index') }}">Home</a></li>
